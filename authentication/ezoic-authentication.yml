@@ -1,0 +1,40 @@
+generated: '2026-07-19'
+method: searched
+source: https://docs.ezoic.com/docs/subscriptions/rest-api/
+docs: https://docs.ezoic.com/docs/subscriptions/rest-api/
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - query
+  - header
+schemes:
+- name: developerKey
+  type: apiKey
+  in: query
+  parameter: developerKey
+  description: Your Ezoic API (developer) key, passed as a query parameter alongside the account-owned domain.
+  sources:
+  - openapi/ezoic-subscriptions-openapi.yml
+- name: X-Ezoic-Reader-Email
+  type: apiKey
+  in: header
+  parameter: X-Ezoic-Reader-Email
+  description: >-
+    Reader identity — the reader's email address. Exactly one reader identity header
+    (email OR token) must be supplied; reader identity must never be in the query string.
+  sources:
+  - https://docs.ezoic.com/docs/subscriptions/rest-api/
+- name: X-Ezoic-Reader-Token
+  type: apiKey
+  in: header
+  parameter: X-Ezoic-Reader-Token
+  description: >-
+    Reader identity — the reader's Ezoic Subscriptions session JWT (visitor-account sites).
+    Alternative to the email header; supply exactly one.
+  sources:
+  - https://docs.ezoic.com/docs/subscriptions/rest-api/
+oauth:
+  note: >-
+    The Ezoic Analytics MCP server (analytics-mcp.ezoic.com/mcp) authenticates separately
+    via OAuth 2.0 with a scoped access token — see mcp/ezoic-mcp.yml.
