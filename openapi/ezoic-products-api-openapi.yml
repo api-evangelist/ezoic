@@ -1,0 +1,90 @@
+openapi: 3.1.0
+info:
+  title: Ezoic Subscriptions Server-to-Server REST Access Products API
+  version: v1
+  description: Server-to-server REST API for Ezoic Subscriptions. Lets a publisher verify a reader's paid access and read a reader's subscriptions/purchases from their own backend, authenticated through the Ezoic API gateway. Faithfully modeled from the public documentation at https://docs.ezoic.com/docs/subscriptions/rest-api/.
+  x-apievangelist-method: searched
+  x-apievangelist-source: https://docs.ezoic.com/docs/subscriptions/rest-api/
+  contact:
+    name: Ezoic Support
+    url: https://support.ezoic.com/
+servers:
+- url: https://api-gateway.ezoic.com/subscriptions/v1
+  description: Ezoic API gateway (production)
+security:
+- developerKey: []
+tags:
+- name: Products
+paths:
+  /products:
+    get:
+      operationId: listProducts
+      summary: List product handles for the domain
+      description: Returns the list of Ezoic Subscriptions product handles configured for the domain.
+      tags:
+      - Products
+      parameters:
+      - $ref: '#/components/parameters/developerKey'
+      - $ref: '#/components/parameters/domain'
+      responses:
+        '200':
+          description: Product handles
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+components:
+  responses:
+    BadRequest:
+      description: Missing required parameters or duplicate identity headers.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Subscriptions disabled for domain or invalid reader token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    developerKey:
+      name: developerKey
+      in: query
+      required: true
+      description: Your Ezoic API key.
+      schema:
+        type: string
+    domain:
+      name: domain
+      in: query
+      required: true
+      description: The domain being queried (must belong to your account).
+      schema:
+        type: string
+  schemas:
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+  securitySchemes:
+    developerKey:
+      type: apiKey
+      in: query
+      name: developerKey
+      description: Your Ezoic API (developer) key, passed as a query parameter.

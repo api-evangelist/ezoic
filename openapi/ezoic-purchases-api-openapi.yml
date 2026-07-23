@@ -1,0 +1,118 @@
+openapi: 3.1.0
+info:
+  title: Ezoic Subscriptions Server-to-Server REST Access Purchases API
+  version: v1
+  description: Server-to-server REST API for Ezoic Subscriptions. Lets a publisher verify a reader's paid access and read a reader's subscriptions/purchases from their own backend, authenticated through the Ezoic API gateway. Faithfully modeled from the public documentation at https://docs.ezoic.com/docs/subscriptions/rest-api/.
+  x-apievangelist-method: searched
+  x-apievangelist-source: https://docs.ezoic.com/docs/subscriptions/rest-api/
+  contact:
+    name: Ezoic Support
+    url: https://support.ezoic.com/
+servers:
+- url: https://api-gateway.ezoic.com/subscriptions/v1
+  description: Ezoic API gateway (production)
+security:
+- developerKey: []
+tags:
+- name: Purchases
+paths:
+  /purchases:
+    get:
+      operationId: listPurchases
+      summary: List a reader's purchases
+      description: Returns the identified reader's subscriptions and one-time purchases for the domain. Exactly one reader identity header must be supplied.
+      tags:
+      - Purchases
+      parameters:
+      - $ref: '#/components/parameters/developerKey'
+      - $ref: '#/components/parameters/domain'
+      - $ref: '#/components/parameters/readerEmail'
+      - $ref: '#/components/parameters/readerToken'
+      responses:
+        '200':
+          description: Reader purchases
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        productKey:
+                          type: string
+                        item:
+                          type: string
+                        status:
+                          type: string
+                          example: active
+                        expiresAt:
+                          type: string
+                          format: date-time
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+components:
+  parameters:
+    readerEmail:
+      name: X-Ezoic-Reader-Email
+      in: header
+      required: false
+      description: Reader's email address. Supply exactly one reader identity header.
+      schema:
+        type: string
+        format: email
+    developerKey:
+      name: developerKey
+      in: query
+      required: true
+      description: Your Ezoic API key.
+      schema:
+        type: string
+    domain:
+      name: domain
+      in: query
+      required: true
+      description: The domain being queried (must belong to your account).
+      schema:
+        type: string
+    readerToken:
+      name: X-Ezoic-Reader-Token
+      in: header
+      required: false
+      description: Reader's Ezoic Subscriptions session JWT (visitor-account sites). Supply exactly one reader identity header.
+      schema:
+        type: string
+  responses:
+    BadRequest:
+      description: Missing required parameters or duplicate identity headers.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Subscriptions disabled for domain or invalid reader token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+  securitySchemes:
+    developerKey:
+      type: apiKey
+      in: query
+      name: developerKey
+      description: Your Ezoic API (developer) key, passed as a query parameter.
