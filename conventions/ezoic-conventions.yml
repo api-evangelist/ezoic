@@ -1,0 +1,32 @@
+generated: '2026-07-19'
+method: searched
+source: https://docs.ezoic.com/docs/subscriptions/rest-api/
+authentication:
+  style: api-key-query
+  detail: >-
+    Site credentials passed as query parameters (developerKey = Ezoic API key,
+    domain = the account-owned domain). Reader identity passed as exactly one header:
+    X-Ezoic-Reader-Email or X-Ezoic-Reader-Token (a session JWT). Reader identity must
+    never be sent in the query string.
+  see_also: authentication/ezoic-authentication.yml
+error_envelope:
+  shape: custom
+  success_field: success
+  message_field: message
+  example: '{ "success": false, "message": "Error description" }'
+  format: not-rfc9457
+  see_also: errors/ezoic-problem-types.yml
+caching:
+  detail: Access responses include Cache-Control:no-store and are not cached.
+idempotency:
+  supported: false
+  note: No idempotency-key header or contract is documented (read-only GET surface).
+pagination:
+  supported: false
+  note: List endpoints (/products, /purchases) return full arrays; no pagination documented.
+versioning:
+  style: uri-path
+  current: v1
+  see_also: lifecycle/ezoic-lifecycle.yml
+rate_limiting:
+  documented: false

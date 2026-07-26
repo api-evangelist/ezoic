@@ -1,0 +1,27 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Ezoic Subscriptions Server-to-Server REST API
+  version: 1.0.0
+extends: openapi/ezoic-subscriptions-openapi.yml
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-enriched: '2026-07-19'
+      x-apievangelist-source: https://docs.ezoic.com/docs/subscriptions/rest-api/
+      x-error-envelope: custom-success-message
+      x-mcp-server: https://analytics-mcp.ezoic.com/mcp
+  - target: $.paths['/access'].get
+    update:
+      x-agentic-access:
+        action-class: read
+        consequence: read
+  - target: $.paths['/products'].get
+    update:
+      x-agentic-access:
+        action-class: read
+        consequence: read
+  - target: $.paths['/purchases'].get
+    update:
+      x-agentic-access:
+        action-class: read
+        consequence: read

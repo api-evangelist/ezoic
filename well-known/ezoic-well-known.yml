@@ -1,0 +1,19 @@
+generated: '2026-07-19'
+method: searched
+source: live probes of /.well-known/* on Ezoic hosts
+note: >-
+  No /.well-known/ discovery documents were served (all probed paths returned 404 or
+  were unreachable). Recorded for auditability; no WellKnown/SecurityTxt pointer is
+  wired because nothing was found.
+hosts:
+  - host: https://www.ezoic.com
+    documents:
+      - { path: /.well-known/security.txt, status: 404 }
+      - { path: /.well-known/openid-configuration, status: 404 }
+      - { path: /.well-known/oauth-authorization-server, status: 404 }
+      - { path: /.well-known/api-catalog, status: 404 }
+      - { path: /.well-known/ai-plugin.json, status: 404 }
+  - host: https://docs.ezoic.com
+    documents:
+      - { path: /.well-known/security.txt, status: 404 }
+      - { path: /llms.txt, status: 200, file: ../llms/ezoic-llms.txt }

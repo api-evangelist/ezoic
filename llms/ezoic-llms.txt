@@ -1,0 +1,78 @@
+# Ezoic Docs
+
+> Agent-readable index for https://docs.ezoic.com/. This file is generated automatically from the Hugo documentation tree.
+> For the complete documentation export, see https://docs.ezoic.com/llms-full.txt.
+
+## Setup
+- [Preface](https://docs.ezoic.com/docs/ezoicads/getting-started/): What to have ready before setting up EzoicAds on your site.
+- [Step 1: Ads.txt Setup](https://docs.ezoic.com/docs/ezoicads/adstxt/): Set up ads.txt for Ezoic to maximize ad revenue. Learn WordPress plugin setup, server redirects, and automated updates. Easy configuration for all platforms.
+- [Step 2: Site Integration](https://docs.ezoic.com/docs/ezoicads/integration/): Complete guide to integrating Ezoic ads using JavaScript. Add header scripts, configure privacy settings, and implement ad placements on any website or CMS platform.
+- [Step 3: Ad Placements](https://docs.ezoic.com/docs/ezoicads/implementation/): Learn how to add Ezoic ad placements to your website. Paste one snippet wherever you want an ad, and let Ezoic control sizing for each spot.
+- [Dynamic Content](https://docs.ezoic.com/docs/ezoicads/dynamic-content/): How to manage Ezoic ads on pages with dynamically loading content.
+- [Troubleshooting](https://docs.ezoic.com/docs/ezoicads/troubleshooting/): Use the JavaScript Integration Debugger to diagnose EzoicAds setup issues.
+
+## Privacy
+- [GDPR Compliance](https://docs.ezoic.com/docs/privacy/gdpr/):  Compliance Privacy Policy You must provide Ezoic with the link to your privacy policy. This can be done at https://pubdash.ezoic.com/settings/privacy/privacypolicy. Your privacy policy must also include additional wording specific to …
+
+## Advanced
+- [Anchor Ads](https://docs.ezoic.com/docs/ezoicadsadvanced/anchor-ads/): Control how Ezoic anchor ads appear on your site.
+- [Ezoic Video](https://docs.ezoic.com/docs/ezoicadsadvanced/ezoic-video/): Add the Ezoic Video player to your website.
+- [Advanced](https://docs.ezoic.com/docs/ezoicadsadvanced/advanced/): Advanced options for fine-tuning how EzoicAds behave on your site.
+- [Ad Slot Complete Event](https://docs.ezoic.com/docs/ezoicadsadvanced/slot-complete-event/): Respond in your code when Ezoic finishes loading an ad slot.
+- [Rewarded Ads](https://docs.ezoic.com/docs/ezoicadsadvanced/rewarded/): Implement Ezoic rewarded ads to monetize user engagement. Complete integration guide with JavaScript examples, content locker setup, and analytics tracking for maximum revenue.
+- [Next.js](https://docs.ezoic.com/docs/ezoicadsadvanced/nextjs/): Implement Ezoic on your site using Next.js. Full guide with examples.
+- [Framework SDKs](https://docs.ezoic.com/docs/ezoicadsadvanced/framework-sdks/): Official open-source Ezoic SDKs for Angular, React, and Vue web apps — display ads, consent, SPA routing, rewarded ads, and video — plus live example implementations.
+
+## Identity
+- [Getting started](https://docs.ezoic.com/docs/identity/getting-started/): Set up Ezoic Identity to share hashed emails and phone numbers with ad vendors.
+- [Email Service Integration](https://docs.ezoic.com/docs/identity/email-service-integration/): Sync your email lists with Ezoic to identify visitors from your newsletters and email campaigns.
+- [Embedding IDs in Links](https://docs.ezoic.com/docs/identity/embedding-ids-in-links/): Pass identity data to Ezoic through parameters in your outbound links.
+- [Google One Tap](https://docs.ezoic.com/docs/identity/google-one-tap/): Set up Google One Tap with Ezoic to increase ad revenue through identified users. Improve targeting, boost match rates, and maximize monetization with verified Google account sign-ins.
+- [Social Login Data Deletion](https://docs.ezoic.com/docs/identity/social-login-data-deletion/): Instructions for requesting deletion of Ezoic Social Login identity data and clearing browser identity data from publisher sites.
+- [Visitor Accounts](https://docs.ezoic.com/docs/identity/visitor-accounts/): Add visitor sign-up and login to your site with Ezoic Visitor Accounts (ezAuth): a drop-in form or a full JavaScript API with email/password and Google sign-in, email verification, and password reset.
+- [BeeHiiv](https://docs.ezoic.com/docs/identity/integrations/beehiiv/): For our BeeHiiv integration, you'll need an API key. You can find this by navigating to the settings section of your BeeHiiv dashboard and locating the integrations page, as shown in the screenshot below: Adding UTM Tagging to your links: …
+- [ActiveCampaign](https://docs.ezoic.com/docs/identity/integrations/activecampaign/): For our ActiveCampaign integration, you will need to provide us with your API URL, API Key and Account name. You can find your account name by navigating to the settings page and you will find it listed at the top. Once you have that, from …
+- [MailChimp](https://docs.ezoic.com/docs/identity/integrations/mailchimp/): For our MailChimp integration we will need you to provide us with an API Key, which you can find by navigating to “Account and Billing” and the under the extras dropdown in your MailChimp selecting the “API Keys”. Adding UTM Tagging to your …
+- [Kit](https://docs.ezoic.com/docs/identity/integrations/kit/): For our Kit integration, you'll need an API key. Specifically, the Kit API V4. You can find this by navigating to the Developer settings section of your Kit dashboard, as shown in the screenshot below: If you need to create a V4 Key: Click …
+- [Mailerlite](https://docs.ezoic.com/docs/identity/integrations/mailerlite/): For our Mailerlite integration, You’ll need to provide us with your Mailerlite account name, and API key. You can find your Mailerlite account name in the top right of your Mailerlite dashboard. To retrieve your API key, navigate to the …
+
+## Mobile Apps
+- [Android](https://docs.ezoic.com/docs/mobileapps/android/): Integrate Ezoic banner, rewarded, interstitial, native, outstream video, and instream video ads into Android apps with the Ezoic Ads SDK, Prebid header bidding, Google Ad Manager, consent support, and pageview tracking.
+- [iOS](https://docs.ezoic.com/docs/mobileapps/ios/): Integrate Ezoic banner, rewarded, interstitial, native, outstream video, and instream video ads into iOS apps with the Ezoic Ads SDK, Swift Package Manager, Prebid header bidding, Google Ad Manager, consent support, and pageview tracking.
+- [Flutter](https://docs.ezoic.com/docs/mobileapps/flutter/): Integrate Ezoic banner, native, outstream video, instream video, rewarded, and interstitial ads into Flutter apps with the Ezoic Flutter SDK, Android and iOS native SDK wrappers, consent support, and pageview tracking.
+- [React Native](https://docs.ezoic.com/docs/mobileapps/react-native/): Integrate Ezoic banner, native, outstream video, instream video, rewarded, and interstitial ads into React Native apps with the Ezoic React Native SDK: installation, Android and iOS setup, banner ads, native ads, video ads, rewarded ads, …
+- [Unity](https://docs.ezoic.com/docs/mobileapps/unity/): Integrate Ezoic banner, rewarded, and interstitial ads into Unity games with the Ezoic Unity SDK: installation, Android and iOS setup, banner ads, banner sizes and events, rewarded ads, interstitial ads, consent support, and pageview …
+
+## Web Games
+- [Getting Started](https://docs.ezoic.com/docs/webgames/getting-started/): Set up the Ezoic Game SDK: prepare the host page, embed the game iframe with the data-ez-game attribute, load gamesdk.js inside the game, and show your first ad break.
+- [API Reference](https://docs.ezoic.com/docs/webgames/api-reference/): Complete EzGameSDK API reference: init, commercialBreak, rewardedBreak, showBanner, hideBanner, gameplayStart, gameplayStop, hasAdBlock, error codes, and cooldown behavior.
+
+## Analytics MCP
+- [Cursor](https://docs.ezoic.com/docs/analytics-mcp/cursor/): Step-by-step guide to connecting Cursor to your Ezoic analytics data with the Ezoic Analytics MCP server and OAuth.
+- [ChatGPT](https://docs.ezoic.com/docs/analytics-mcp/chatgpt/): Install the official Ezoic Analytics plugin from the ChatGPT plugin directory and sign in with your Ezoic account via OAuth.
+- [Claude](https://docs.ezoic.com/docs/analytics-mcp/claude/): Connect Claude.ai or Claude Desktop to your Ezoic analytics with the Analytics MCP server using a custom connector and OAuth.
+- [Claude Code](https://docs.ezoic.com/docs/analytics-mcp/claude-code/): Install the Ezoic Analytics MCP server in Claude Code and sign in with your Ezoic account via OAuth.
+- [VS Code](https://docs.ezoic.com/docs/analytics-mcp/vscode/): Add the Ezoic Analytics MCP server to VS Code and sign in with your Ezoic account via OAuth.
+- [Codex](https://docs.ezoic.com/docs/analytics-mcp/codex/): Configure the Ezoic Analytics MCP server in Codex CLI and sign in with your Ezoic account via OAuth.
+
+## Custom Events
+- [Getting Started](https://docs.ezoic.com/docs/customevents/getting-started/):  Overview Custom Events let publishers send their own events to Ezoic. These events can be used in Ezoic's Big Data Analytics (BDA) platform for dynamic reporting and analysis. Usage To send a custom event: 
+
+## Ezoic Subscriptions
+- [Getting Started](https://docs.ezoic.com/docs/subscriptions/getting-started/): Learn the setup path for Ezoic Subscriptions, including payments, products, prices, onsite script setup, SEO markup, and subscriber checkout.
+- [Payment Setup](https://docs.ezoic.com/docs/subscriptions/payment-setup/): Choose how Ezoic Subscriptions collects payments, including Ezoic-managed payments and Stripe Connect.
+- [Products, Prices, and Paid Access](https://docs.ezoic.com/docs/subscriptions/products/): Create Ezoic Subscriptions products with prices and product handles to sell subscriptions and one-time purchases on your site.
+- [Onsite Script Integration](https://docs.ezoic.com/docs/subscriptions/site-integration/): Install the Ezoic Subscriptions onsite script and launch paid access with product handles.
+- [Publisher-Managed Access API](https://docs.ezoic.com/docs/subscriptions/publisher-managed-access/): Use Ezoic Subscriptions product handles to control paid content, member-only features, and subscriber experiences on your site.
+- [Visitor Authentication](https://docs.ezoic.com/docs/subscriptions/visitor-authentication/): Configure how visitors sign in to Ezoic Subscriptions: use built-in Ezoic visitor accounts with no setup, or bring your own login through the ezsubscriptions AuthAdapter.
+- [Paywall Appearance and Styling](https://docs.ezoic.com/docs/subscriptions/paywall-appearance/): Control how the Ezoic Subscriptions paywall and checkout look — pick a template, color mode, and accent, or match your brand exactly with CSS variables.
+- [SEO and Paywalling Best Practices](https://docs.ezoic.com/docs/subscriptions/seo-paywalling-best-practices/): Use Google-supported paywalled-content structured data with Ezoic Subscriptions and avoid common SEO mistakes for gated articles.
+- [Donation Integration](https://docs.ezoic.com/docs/subscriptions/donations/): Enable Ezoic Subscriptions donations and open a professional donation checkout from your own site buttons.
+- [Subscriber Experience](https://docs.ezoic.com/docs/subscriptions/subscriber-experience/): Understand what subscribers see when they buy, log in, manage subscriptions, update cards, and view receipts with Ezoic Subscriptions.
+- [JavaScript API Reference](https://docs.ezoic.com/docs/subscriptions/api-reference/): Reference the ezsubscriptions JavaScript API methods, options, callbacks, and return values for onsite Ezoic Subscriptions integrations.
+- [Server-to-Server REST API](https://docs.ezoic.com/docs/subscriptions/rest-api/): Verify reader access and read subscriptions from your own server with the Ezoic Subscriptions REST API, authenticated through the Ezoic API gateway.
+- [Troubleshooting](https://docs.ezoic.com/docs/subscriptions/troubleshooting/): Troubleshoot Ezoic Subscriptions script loading, paywall display, subscriber access, SEO markup, donations, checkout, and portal issues.
+
+## Legacy Features
+- [Hybrid Option](https://docs.ezoic.com/docs/ezoic-legacy-features/hybrid/): For more complex sites that have a mix of static and dynamic content, and want to make use of all of Ezoic's features, we have our Hybrid Integration. Hybrid Integration Hybrid Integration is when a site integrates through nameservers or …
+- [Legacy Features](https://docs.ezoic.com/docs/ezoic-legacy-features/legacy/):  Prerequisites Make sure placeholders are created via the Ezoic dashboard. See our support article to learn more about placeholders and how to create them. Load Standalone library Load the standalone library by adding this script to the of …

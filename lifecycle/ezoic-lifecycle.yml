@@ -1,0 +1,18 @@
+generated: '2026-07-19'
+method: searched
+source: https://docs.ezoic.com/
+versioning:
+  scheme: uri-path
+  current: v1
+  evidence: Subscriptions REST API base path /subscriptions/v1
+status_page: https://ezoicstatus.com/
+deprecation:
+  policy_url: https://docs.ezoic.com/docs/ezoic-legacy-features/legacy/
+  note: >-
+    Ezoic documents a "Legacy Features" section covering deprecated integration paths
+    (standalone library, hybrid/nameserver integration). No formal Sunset/Deprecation
+    (RFC 8594) header policy is published for the REST API.
+support:
+  help_center: https://support.ezoic.com/
+  community: https://community.ezoic.com/
+deprecated_operations: []

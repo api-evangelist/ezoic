@@ -1,0 +1,42 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/ezoic-subscriptions-openapi.yml
+format: custom
+envelope:
+  success_field: success
+  message_field: message
+  note: >-
+    Ezoic Subscriptions REST API returns a custom JSON error envelope
+    ({ "success": false, "message": "..." }), not RFC 9457 application/problem+json.
+problems:
+  - status: 400
+    title: Bad Request
+    meaning: Missing required parameters or duplicate reader identity headers.
+    remediation: >-
+      Supply developerKey and domain, exactly one of product/item where required, and
+      exactly one reader identity header.
+    source_operations:
+      - openapi/ezoic-subscriptions-openapi.yml#checkAccess
+      - openapi/ezoic-subscriptions-openapi.yml#listProducts
+      - openapi/ezoic-subscriptions-openapi.yml#listPurchases
+  - status: 403
+    title: Forbidden
+    meaning: Subscriptions disabled for the domain, or an invalid reader token.
+    remediation: Enable Ezoic Subscriptions for the domain and verify the reader session JWT.
+    source_operations:
+      - openapi/ezoic-subscriptions-openapi.yml#checkAccess
+      - openapi/ezoic-subscriptions-openapi.yml#listPurchases
+access_decision_reason_codes:
+  note: >-
+    The /access decision carries a reasonCode enumerating why access was allowed or
+    denied (application-level, not an HTTP error).
+  codes:
+    - allowed
+    - customer_required
+    - unknown_product
+    - no_entitlement
+    - not_started
+    - expired
+    - revoked
+    - suspended
+    - pending

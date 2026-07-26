@@ -1,0 +1,8 @@
+generated: '2026-07-19'
+method: generated
+source: openapi/ezoic-subscriptions-openapi.yml
+skills:
+  - file: ezoic-verify-reader-access.md
+    name: Verify an Ezoic Subscriptions reader's access
+    api: openapi/ezoic-subscriptions-openapi.yml
+    operations: [checkAccess, listProducts, listPurchases]

@@ -1,0 +1,46 @@
+generated: '2026-07-19'
+method: searched
+source: https://docs.ezoic.com/docs/ezoicadsadvanced/framework-sdks/
+note: >-
+  Official open-source Ezoic client SDKs for displaying ads (display, rewarded, video),
+  consent, and SPA routing. Web framework SDKs are pre-1.0 and distributed via GitHub;
+  the React Native SDK is published to npm.
+packages:
+  - language: typescript
+    registry: github
+    name: "@ezoic/react-native-sdk"
+    url: https://www.npmjs.com/package/@ezoic/react-native-sdk
+    repo: https://github.com/ezoic/ezoic-react-native-sdk
+    install: npm install @ezoic/react-native-sdk
+    version: 1.5.0
+    official: true
+    description: Ezoic Ads SDK for React Native (Prebid + Google Ad Manager).
+  - language: typescript
+    registry: github
+    name: "@ezoic/angular-sdk"
+    url: https://github.com/ezoic/ezoic-angular-sdk
+    repo: https://github.com/ezoic/ezoic-angular-sdk
+    install: npm install @ezoic/angular-sdk
+    official: true
+    description: Ezoic SDK for Angular — display, rewarded, and video ads (pre-1.0).
+  - language: typescript
+    registry: github
+    name: "@ezoic/react-sdk"
+    url: https://github.com/ezoic/ezoic-react-sdk
+    repo: https://github.com/ezoic/ezoic-react-sdk
+    install: npm install @ezoic/react-sdk
+    official: true
+    description: Ezoic SDK for React — display, rewarded, and video ads (pre-1.0).
+  - language: typescript
+    registry: github
+    name: "@ezoic/vue-sdk"
+    url: https://github.com/ezoic/ezoic-vue-sdk
+    repo: https://github.com/ezoic/ezoic-vue-sdk
+    install: npm install @ezoic/vue-sdk
+    official: true
+    description: Ezoic SDK for Vue 3 — display, rewarded, and video ads (pre-1.0).
+mobile_native_sdks:
+  note: >-
+    Native mobile ad SDKs documented at docs.ezoic.com/docs/mobileapps/ (Android, iOS
+    via Swift Package Manager, Flutter, Unity). Distribution channels vary by platform;
+    only first-party artifacts with confirmed registry/repo URLs are listed above.

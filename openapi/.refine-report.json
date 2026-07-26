@@ -1,0 +1,18 @@
+{
+  "provider": "ezoic",
+  "sources": [
+    "ezoic-access-api-openapi.yml",
+    "ezoic-products-api-openapi.yml",
+    "ezoic-purchases-api-openapi.yml"
+  ],
+  "outputs": [
+    "ezoic-access-api-openapi.yml",
+    "ezoic-products-api-openapi.yml",
+    "ezoic-purchases-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

@@ -1,0 +1,46 @@
+generated: '2026-07-19'
+method: searched
+status: published
+source: https://docs.ezoic.com/docs/analytics-mcp/
+server:
+  name: ezoic-analytics
+  description: >-
+    Official hosted Ezoic Analytics MCP server. Read-only access to a publisher's
+    Ezoic analytics (pageview, ad impression, rewarded, and video data). Cannot modify
+    account settings or configuration. Requires the Analytics permission on the Ezoic
+    account.
+  transport: http
+  url: https://analytics-mcp.ezoic.com/mcp
+  auth:
+    type: oauth2
+    description: >-
+      OAuth 2.0. The user is redirected to Ezoic's login, authorizes the connection,
+      and the assistant receives a scoped access token. Analytics permission required.
+  clients:
+    - name: Claude.ai / Claude Desktop
+      docs: https://docs.ezoic.com/docs/analytics-mcp/claude/
+    - name: Claude Code
+      docs: https://docs.ezoic.com/docs/analytics-mcp/claude-code/
+    - name: ChatGPT
+      docs: https://docs.ezoic.com/docs/analytics-mcp/chatgpt/
+    - name: Cursor
+      docs: https://docs.ezoic.com/docs/analytics-mcp/cursor/
+    - name: VS Code
+      docs: https://docs.ezoic.com/docs/analytics-mcp/vscode/
+    - name: Codex
+      docs: https://docs.ezoic.com/docs/analytics-mcp/codex/
+tools:
+  - name: available_domains
+    description: List the domains accessible to the user's Ezoic account.
+  - name: pageview_data
+    description: >-
+      Traffic metrics — pageviews, visits, EPMV, and engagement time. Filter/sort by
+      date, page, country, device, browser, traffic source.
+  - name: ad_impression_data
+    description: >-
+      Impressions, clicks, viewability, RPM, and ad revenue breakdowns. Filter/sort by
+      date, page, country, device, browser, ad unit.
+  - name: rewarded_ad_data
+    description: Rewarded-ad starts, completions, completion rates, and revenue.
+  - name: video_data
+    description: Video plays, completions, watch time, video revenue, and CPM.

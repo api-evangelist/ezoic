@@ -1,0 +1,31 @@
+generated: '2026-07-19'
+method: searched
+source: https://docs.ezoic.com/
+note: >-
+  Client-side / embeddable Ezoic surfaces (distinct from server-side integration).
+components:
+  - family: EzoicAds
+    kind: script-embed
+    description: JavaScript ad integration — header scripts plus per-slot placeholder snippets Ezoic sizes and fills.
+    docs: https://docs.ezoic.com/docs/ezoicads/integration/
+  - family: Ezoic Video
+    kind: embedded-player
+    description: Drop-in Ezoic Video player embedded on the page.
+    docs: https://docs.ezoic.com/docs/ezoicadsadvanced/ezoic-video/
+  - family: EzGameSDK
+    kind: web-component
+    description: Game iframe embed (data-ez-game attribute) + gamesdk.js for ad breaks and rewarded ads.
+    docs: https://docs.ezoic.com/docs/webgames/api-reference/
+  - family: ezsubscriptions
+    kind: embedded-paywall
+    description: Onsite Subscriptions paywall/checkout and JavaScript API for gating content.
+    docs: https://docs.ezoic.com/docs/subscriptions/api-reference/
+  - family: ezAuth (Visitor Accounts)
+    kind: embedded-form
+    description: Drop-in visitor sign-up/login form (email/password + Google), or a full JavaScript API.
+    docs: https://docs.ezoic.com/docs/identity/visitor-accounts/
+loaders:
+  - name: ezsubscriptions onsite script
+    docs: https://docs.ezoic.com/docs/subscriptions/site-integration/
+  - name: gamesdk.js
+    docs: https://docs.ezoic.com/docs/webgames/getting-started/

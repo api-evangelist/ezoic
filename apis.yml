@@ -1,25 +1,161 @@
 aid: ezoic
 name: ezoic
-description: ezoic is a company surfaced as a portfolio company of balderton-capital and added to the
-  API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+description: >-
+  Ezoic is a website monetization and audience-growth platform for publishers, and a
+  performance advertising marketplace for brands. Publishers integrate EzoicAds (via
+  JavaScript, mobile SDKs for Android/iOS/Flutter/React Native/Unity, or framework SDKs
+  for Angular/React/Vue) to run native, sticky, video, anchor, rewarded, and interstitial
+  ad formats across 5,000+ premium sites. Beyond ads, Ezoic offers first-party Identity
+  (ezID), Visitor Accounts (ezAuth), Ezoic Subscriptions (paywalls, donations, and a
+  server-to-server REST API for verifying reader access), a Web Games ad SDK, Custom
+  Events into its Big Data Analytics platform, and an official hosted Analytics MCP server
+  that exposes read-only pageview, ad-impression, rewarded, and video analytics to AI
+  assistants over OAuth.
 url: https://raw.githubusercontent.com/api-evangelist/ezoic/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - balderton-capital
-x-tier: stub
+x-tier: enriched
 x-tier-reason: portfolio-lead
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://www.ezoic.com/wp-content/uploads/2021/03/ezoic-logo.png
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-19'
 tags:
 - Company
-apis: []
+- Advertising
+- AdTech
+- Publisher Monetization
+- Analytics
+- Subscriptions
+- Identity
+- MCP
+apis:
+- aid: ezoic:ezoic-access-api
+  name: ezoic Access API
+  description: The Access API from ezoic — 1 operation(s) for access.
+  humanURL: https://docs.ezoic.com/docs/subscriptions/rest-api/
+  baseURL: https://api-gateway.ezoic.com/subscriptions/v1
+  tags:
+  - Access
+  properties:
+  - type: OpenAPI
+    url: openapi/ezoic-access-api-openapi.yml
+  - type: APIReference
+    url: https://docs.ezoic.com/docs/subscriptions/rest-api/
+  - type: Documentation
+    url: https://docs.ezoic.com/docs/subscriptions/getting-started/
+- aid: ezoic:ezoic-products-api
+  name: ezoic Products API
+  description: The Products API from ezoic — 1 operation(s) for products.
+  humanURL: https://docs.ezoic.com/docs/subscriptions/rest-api/
+  baseURL: https://api-gateway.ezoic.com/subscriptions/v1
+  tags:
+  - Products
+  properties:
+  - type: OpenAPI
+    url: openapi/ezoic-products-api-openapi.yml
+  - type: APIReference
+    url: https://docs.ezoic.com/docs/subscriptions/rest-api/
+  - type: Documentation
+    url: https://docs.ezoic.com/docs/subscriptions/getting-started/
+- aid: ezoic:ezoic-purchases-api
+  name: ezoic Purchases API
+  description: The Purchases API from ezoic — 1 operation(s) for purchases.
+  humanURL: https://docs.ezoic.com/docs/subscriptions/rest-api/
+  baseURL: https://api-gateway.ezoic.com/subscriptions/v1
+  tags:
+  - Purchases
+  properties:
+  - type: OpenAPI
+    url: openapi/ezoic-purchases-api-openapi.yml
+  - type: APIReference
+    url: https://docs.ezoic.com/docs/subscriptions/rest-api/
+  - type: Documentation
+    url: https://docs.ezoic.com/docs/subscriptions/getting-started/
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DeveloperPortal
+  url: https://docs.ezoic.com/
+- type: Documentation
+  url: https://docs.ezoic.com/
+- type: APIReference
+  url: https://docs.ezoic.com/docs/subscriptions/rest-api/
+- type: GettingStarted
+  url: https://docs.ezoic.com/docs/ezoicads/getting-started/
+- type: Support
+  url: https://support.ezoic.com/
+- type: HelpCenter
+  url: https://community.ezoic.com/
+- type: Blog
+  url: https://www.ezoic.com/blog
+- type: GitHubOrganization
+  url: https://github.com/ezoic
+- type: StatusPage
+  url: https://ezoicstatus.com/
+- type: Deprecation
+  url: https://docs.ezoic.com/docs/ezoic-legacy-features/legacy/
+- type: Pricing
+  url: https://www.ezoic.com/pricing
+- type: Login
+  url: https://pubdash.ezoic.com/
+- type: TermsOfService
+  url: https://www.ezoic.com/terms
+- type: PrivacyPolicy
+  url: https://www.ezoic.com/privacy-policy
+- type: MCPServer
+  url: mcp/ezoic-mcp.yml
+- type: LLMsTxt
+  url: llms/ezoic-llms.txt
+- type: Packages
+  url: packages/ezoic-packages.yml
+- type: SDKs
+  url: packages/ezoic-packages.yml
+- type: Authentication
+  url: authentication/ezoic-authentication.yml
+- type: Conventions
+  url: conventions/ezoic-conventions.yml
+- type: ErrorCatalog
+  url: errors/ezoic-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/ezoic-lifecycle.yml
+- type: Conformance
+  url: conformance/ezoic-conformance.yml
+- type: DataModel
+  url: data-model/ezoic-data-model.yml
+- type: Components
+  url: components/ezoic-components.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: AgenticAccess
+  url: agentic-access/ezoic-agentic-access.yml
+- type: Security
+  url: https://www.ezoic.com/security
+- type: VulnerabilityDisclosure
+  url: security/ezoic-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/ezoic-domain-security.yml
 - type: Website
   url: https://www.ezoic.com/
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

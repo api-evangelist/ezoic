@@ -1,0 +1,25 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/ezoic-subscriptions-openapi.yml, mcp/ezoic-mcp.yml
+standards:
+  - id: rest
+    conforms: true
+    evidence: JSON-over-HTTPS resource endpoints (/access, /products, /purchases).
+  - id: oauth2
+    conforms: true
+    evidence: Ezoic Analytics MCP server authenticates via OAuth 2.0 (scoped access token).
+  - id: mcp
+    conforms: true
+    evidence: Official hosted Model Context Protocol server at analytics-mcp.ezoic.com/mcp.
+  - id: jwt
+    conforms: true
+    evidence: Reader identity accepted as an Ezoic Subscriptions session JWT (X-Ezoic-Reader-Token).
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: Errors use a custom { success, message } envelope, not application/problem+json.
+  - id: rfc9116-security-txt
+    conforms: false
+    evidence: No /.well-known/security.txt served.
+  - id: openid-connect
+    conforms: false
+    evidence: No /.well-known/openid-configuration served.

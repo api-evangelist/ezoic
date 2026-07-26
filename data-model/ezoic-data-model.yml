@@ -1,0 +1,40 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/ezoic-subscriptions-openapi.yml, https://docs.ezoic.com/docs/subscriptions/
+entities:
+  - name: Domain
+    description: A publisher site registered to an Ezoic account; scopes all subscriptions data.
+    key: domain
+  - name: Product
+    description: An Ezoic Subscriptions product (subscription or one-time), addressed by a product handle.
+    key: productKey (handle)
+  - name: Purchase
+    description: A reader's subscription or one-time purchase of a product/item.
+    fields: [productKey, item, status, expiresAt]
+  - name: Reader
+    description: An identified visitor, addressed by email or a session JWT.
+    key: X-Ezoic-Reader-Email | X-Ezoic-Reader-Token
+  - name: AccessDecision
+    description: The computed allow/deny result for a reader against a product or item.
+    fields: [decision, reasonCode]
+relationships:
+  - from: Product
+    to: Domain
+    type: belongs_to
+    via: domain
+  - from: Purchase
+    to: Product
+    type: belongs_to
+    via: productKey
+  - from: Purchase
+    to: Reader
+    type: belongs_to
+    via: reader identity
+  - from: AccessDecision
+    to: Reader
+    type: belongs_to
+    via: reader identity
+  - from: AccessDecision
+    to: Product
+    type: references
+    via: product|item
