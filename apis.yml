@@ -92,6 +92,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/ezoic-subscriptions-overlay.yaml
 - type: DeveloperPortal
   url: https://docs.ezoic.com/
 - type: Documentation
