@@ -7,10 +7,15 @@ description: >-
   for Angular/React/Vue) to run native, sticky, video, anchor, rewarded, and interstitial
   ad formats across 5,000+ premium sites. Beyond ads, Ezoic offers first-party Identity
   (ezID), Visitor Accounts (ezAuth), Ezoic Subscriptions (paywalls, donations, and a
-  server-to-server REST API for verifying reader access), a Web Games ad SDK, Custom
-  Events into its Big Data Analytics platform, and an official hosted Analytics MCP server
-  that exposes read-only pageview, ad-impression, rewarded, and video analytics to AI
-  assistants over OAuth.
+  server-to-server REST API for verifying reader access), a Web Games ad SDK, and Custom
+  Events into its Big Data Analytics platform. Its developer surface is a single API
+  gateway (api-gateway.ezoic.com) fronting three services enabled individually from the
+  dashboard and sharing one developerKey — Big Data Analytics for reports, segments and
+  custom data; CDN for cache clearing and purging; and Subscriptions for server-side
+  reader entitlement checks. Ezoic also runs three hosted MCP servers: a read-only
+  Analytics server over OAuth, an anonymous Setup Assistant listed in the official MCP
+  Registry as com.ezoic/setup, and an OAuth-gated endpoint on bidsystem.ai, its
+  performance advertising platform for brands.
 url: https://raw.githubusercontent.com/api-evangelist/ezoic/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -33,16 +38,22 @@ accessModel:
 image: https://www.ezoic.com/wp-content/uploads/2021/03/ezoic-logo.png
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-19'
+modified: '2026-08-13'
 tags:
 - Company
 - Advertising
 - AdTech
 - Publisher Monetization
 - Analytics
+- Reporting
 - Subscriptions
+- Paywalls
 - Identity
+- CDN
+- Caching
 - MCP
+- OAuth
+- Agents
 apis:
 - aid: ezoic:ezoic-access-api
   name: ezoic Access API
@@ -54,6 +65,10 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/ezoic-access-api-openapi.yml
+  - type: PostmanCollection
+    url: collections/ezoic-access-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/ezoic-access-api.opencollection.json
   - type: APIReference
     url: https://docs.ezoic.com/docs/subscriptions/rest-api/
   - type: Documentation
@@ -68,6 +83,10 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/ezoic-products-api-openapi.yml
+  - type: PostmanCollection
+    url: collections/ezoic-products-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/ezoic-products-api.opencollection.json
   - type: APIReference
     url: https://docs.ezoic.com/docs/subscriptions/rest-api/
   - type: Documentation
@@ -82,10 +101,68 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/ezoic-purchases-api-openapi.yml
+  - type: PostmanCollection
+    url: collections/ezoic-purchases-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/ezoic-purchases-api.opencollection.json
   - type: APIReference
     url: https://docs.ezoic.com/docs/subscriptions/rest-api/
   - type: Documentation
     url: https://docs.ezoic.com/docs/subscriptions/getting-started/
+- aid: ezoic:ezoic-big-data-analytics-api
+  name: ezoic Big Data Analytics API
+  description: >-
+    The Big Data Analytics (BDA) REST API pulls the same reports and analytics data a
+    publisher sees in the Ezoic dashboard — predefined reports that ship with the account
+    and custom reports the publisher builds. 11 operations covering report definitions,
+    report data, ad-hoc custom data, segments, and the multifilters that build them.
+    Enabled per-service from Settings → API Access and authenticated with the shared
+    Ezoic API-gateway developerKey.
+  humanURL: https://docs.ezoic.com/docs/api/bdaservices/
+  baseURL: https://api-gateway.ezoic.com
+  tags:
+  - Analytics
+  - Reports
+  - Data
+  - Segments
+  - Filters
+  properties:
+  - type: OpenAPI
+    url: openapi/ezoic-big-data-analytics-api-openapi.yml
+  - type: Overlay
+    url: overlays/ezoic-big-data-analytics-overlay.yaml
+  - type: APIReference
+    url: https://docs.ezoic.com/docs/api/bdaservices/
+  - type: Documentation
+    url: https://docs.ezoic.com/docs/api/
+  - type: AgentSkill
+    url: skills/ezoic-pull-analytics-report.md
+  - type: AgentSkill
+    url: skills/ezoic-build-custom-report.md
+- aid: ezoic:ezoic-cdn-api
+  name: ezoic CDN API
+  description: >-
+    The CDN REST API clears and purges cached content on the Ezoic CDN — a single URL, a
+    batch of URLs in groups of 100, a comma-separated set of surrogate keys, or a whole
+    domain — plus a ping liveness check. 5 operations under /cdnservices/, enabled from
+    Settings → API Access and authenticated with the shared Ezoic API-gateway
+    developerKey.
+  humanURL: https://docs.ezoic.com/docs/api/cdn/
+  baseURL: https://api-gateway.ezoic.com
+  tags:
+  - CDN
+  - Caching
+  properties:
+  - type: OpenAPI
+    url: openapi/ezoic-cdn-api-openapi.yml
+  - type: Overlay
+    url: overlays/ezoic-cdn-overlay.yaml
+  - type: APIReference
+    url: https://docs.ezoic.com/docs/api/cdn/
+  - type: Documentation
+    url: https://docs.ezoic.com/docs/api/
+  - type: AgentSkill
+    url: skills/ezoic-purge-cdn-cache.md
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -118,14 +195,28 @@ common:
   url: https://www.ezoic.com/pricing
 - type: Login
   url: https://pubdash.ezoic.com/
+- type: SignUp
+  url: https://admin.bidsystem.ai/register
 - type: TermsOfService
   url: https://www.ezoic.com/terms
 - type: PrivacyPolicy
   url: https://www.ezoic.com/privacy-policy
 - type: MCPServer
   url: mcp/ezoic-mcp.yml
+- type: ToolCrosswalk
+  url: mcp/ezoic-tool-crosswalk.yml
 - type: LLMsTxt
   url: llms/ezoic-llms.txt
+- type: WellKnown
+  url: well-known/ezoic-well-known.yml
+- type: OAuthScopes
+  url: scopes/ezoic-scopes.yml
+- type: Sandbox
+  url: sandbox/ezoic-sandbox.yml
+- type: Plans
+  url: plans/ezoic-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/ezoic-rate-limits.yml
 - type: Packages
   url: packages/ezoic-packages.yml
 - type: SDKs
@@ -157,7 +248,7 @@ common:
 - type: Website
   url: https://www.ezoic.com/
 x-enrichment:
-  date: '2026-07-19'
-  status: backfilled
+  date: '2026-08-13'
+  status: enriched
+  artifacts_added: 18
   pass: local-v1
-  note: backfilled from .gitignore signal + verified work evidence
