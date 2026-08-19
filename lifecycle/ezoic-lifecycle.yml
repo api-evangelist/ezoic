@@ -1,18 +1,65 @@
-generated: '2026-07-19'
+generated: '2026-08-13'
 method: searched
-source: https://docs.ezoic.com/
+source: >-
+  https://docs.ezoic.com/docs/api/ , https://docs.ezoic.com/docs/subscriptions/rest-api/ ,
+  https://docs.ezoic.com/docs/ezoic-legacy-features/legacy/ , https://ezoicstatus.com/
 versioning:
-  scheme: uri-path
-  current: v1
-  evidence: Subscriptions REST API base path /subscriptions/v1
+  consistent: false
+  by_service:
+  - service: Subscriptions
+    scheme: uri-path
+    current: v1
+    evidence: Base URL https://api-gateway.ezoic.com/subscriptions/v1
+  - service: Big Data Analytics
+    scheme: none
+    current: null
+    evidence: >-
+      Paths are /bdaservices/<operation>/ with no version segment. No version header or
+      query parameter is documented either.
+  - service: CDN
+    scheme: none
+    current: null
+    evidence: Paths are /cdnservices/<operation> with no version segment.
+  finding: >-
+    Two of Ezoic's three gateway services are unversioned, so a consumer of Big Data
+    Analytics or CDN has no published mechanism through which a breaking change could be
+    signalled or opted out of.
 status_page: https://ezoicstatus.com/
 deprecation:
   policy_url: https://docs.ezoic.com/docs/ezoic-legacy-features/legacy/
+  headers:
+    sunset: false
+    deprecation: false
+    note: No RFC 8594 Sunset or Deprecation header policy is published for any Ezoic API.
   note: >-
-    Ezoic documents a "Legacy Features" section covering deprecated integration paths
-    (standalone library, hybrid/nameserver integration). No formal Sunset/Deprecation
-    (RFC 8594) header policy is published for the REST API.
+    Ezoic maintains a "Legacy Features" documentation section covering deprecated
+    integration paths (the standalone library, hybrid/nameserver integration). That is an
+    integration-level deprecation record, not an API-level policy — no endpoint, field or
+    parameter deprecation notice, timeline, or migration window is published for the REST
+    APIs.
+changelog:
+  published: false
+  probed:
+  - url: https://www.ezoic.com/changelog
+    status: 404
+  - url: https://docs.ezoic.com/changelog
+    status: 404
+  note: >-
+    No dated changelog or release-notes page was found on the marketing site or the
+    documentation host, and llms.txt (which indexes the whole docs tree) contains no
+    changelog entry. Product release history is announced on the blog rather than as a
+    versioned API changelog.
+  blog: https://www.ezoic.com/blog
+sdk_release_cadence:
+  note: >-
+    The nearest thing to a public release record is the GitHub org, where the client SDKs
+    are tagged. See packages/ezoic-packages.yml for versions and dates — including the
+    finding that @ezoic/react-sdk's npm release trails its GitHub release.
+  source: https://github.com/ezoic
 support:
   help_center: https://support.ezoic.com/
   community: https://community.ezoic.com/
+sla:
+  published: false
+  note: No uptime SLA or availability commitment is published for the API gateway or the MCP servers.
 deprecated_operations: []

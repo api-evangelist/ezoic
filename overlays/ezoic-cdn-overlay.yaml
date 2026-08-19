@@ -1,0 +1,50 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Ezoic CDN API
+  version: 1.0.0
+extends: openapi/ezoic-cdn-api-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-enriched: '2026-08-13'
+    x-apievangelist-source: https://docs.ezoic.com/docs/api/cdn/
+    x-error-envelope: custom-Success-Error
+    x-versioning: none
+    x-rate-limits: not published
+    x-note: >-
+      Every endpoint is POST, including the /cdnservices/ping/ liveness read, and every
+      endpoint returns the same {Success, Error} envelope on both success and failure.
+- target: $.paths['/cdnservices/ping/'].post
+  update:
+    x-agentic-access:
+      action-class: connected
+      consequence: read
+    x-note: Declared POST by Ezoic despite being a pure liveness read.
+- target: $.paths['/cdnservices/clearcache'].post
+  update:
+    x-agentic-access:
+      action-class: connected
+      consequence: write
+    x-idempotency: effectively idempotent — clearing an already-clear URL is a no-op.
+- target: $.paths['/cdnservices/bulkclearcache'].post
+  update:
+    x-agentic-access:
+      action-class: connected
+      consequence: write
+    x-batch-size: 100
+    x-idempotency: effectively idempotent.
+- target: $.paths['/cdnservices/clearbysurrogatekeys'].post
+  update:
+    x-agentic-access:
+      action-class: connected
+      consequence: write
+    x-idempotency: effectively idempotent.
+- target: $.paths['/cdnservices/purgecache'].post
+  update:
+    x-agentic-access:
+      action-class: connected
+      consequence: write
+      human-in-the-loop: recommended
+    x-note: >-
+      Purges the ENTIRE cache for a domain. Effectively idempotent, but expensive — a
+      repeat call re-empties a warming cache and pushes origin load again.

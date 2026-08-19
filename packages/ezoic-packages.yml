@@ -1,46 +1,137 @@
-generated: '2026-07-19'
+generated: '2026-08-13'
 method: searched
-source: https://docs.ezoic.com/docs/ezoicadsadvanced/framework-sdks/
+source: >-
+  https://docs.ezoic.com/docs/ezoicadsadvanced/framework-sdks/ ,
+  https://docs.ezoic.com/docs/mobileapps/ , https://github.com/ezoic ,
+  registry.npmjs.org , pub.dev
 note: >-
-  Official open-source Ezoic client SDKs for displaying ads (display, rewarded, video),
-  consent, and SPA routing. Web framework SDKs are pre-1.0 and distributed via GitHub;
-  the React Native SDK is published to npm.
+  First-party Ezoic client SDKs for displaying ads (display, native, banner, interstitial,
+  rewarded, video), consent/CMP, and SPA routing. Versions and dates below were read from
+  registry metadata endpoints where a registry exists, and from GitHub releases/tags where
+  distribution is git- or CDN-based.
+currency_finding: >-
+  Two distribution gaps are worth naming. (1) @ezoic/react-sdk's newest GitHub release is
+  v1.0.2 (2026-08-07) but npm still serves 1.0.0 (2026-07-22) — the registry a consumer
+  installs from is two patch releases behind the repo. (2) @ezoic/angular-sdk is
+  documented with an `npm install @ezoic/angular-sdk` command that cannot succeed: the npm
+  registry returns 404 for that name, and the package is only obtainable from GitHub.
 packages:
-  - language: typescript
-    registry: github
-    name: "@ezoic/react-native-sdk"
-    url: https://www.npmjs.com/package/@ezoic/react-native-sdk
-    repo: https://github.com/ezoic/ezoic-react-native-sdk
-    install: npm install @ezoic/react-native-sdk
-    version: 1.5.0
-    official: true
-    description: Ezoic Ads SDK for React Native (Prebid + Google Ad Manager).
-  - language: typescript
-    registry: github
-    name: "@ezoic/angular-sdk"
-    url: https://github.com/ezoic/ezoic-angular-sdk
-    repo: https://github.com/ezoic/ezoic-angular-sdk
-    install: npm install @ezoic/angular-sdk
-    official: true
-    description: Ezoic SDK for Angular — display, rewarded, and video ads (pre-1.0).
-  - language: typescript
-    registry: github
-    name: "@ezoic/react-sdk"
-    url: https://github.com/ezoic/ezoic-react-sdk
-    repo: https://github.com/ezoic/ezoic-react-sdk
-    install: npm install @ezoic/react-sdk
-    official: true
-    description: Ezoic SDK for React — display, rewarded, and video ads (pre-1.0).
-  - language: typescript
-    registry: github
-    name: "@ezoic/vue-sdk"
-    url: https://github.com/ezoic/ezoic-vue-sdk
-    repo: https://github.com/ezoic/ezoic-vue-sdk
-    install: npm install @ezoic/vue-sdk
-    official: true
-    description: Ezoic SDK for Vue 3 — display, rewarded, and video ads (pre-1.0).
-mobile_native_sdks:
+- language: typescript
+  registry: npm
+  name: '@ezoic/react-native-sdk'
+  url: https://www.npmjs.com/package/@ezoic/react-native-sdk
+  repo: https://github.com/ezoic/react-native-sdk
+  install: npm install @ezoic/react-native-sdk
+  version: 1.5.0
+  published: '2026-07-05'
+  official: true
+  description: Ezoic Ads SDK for React Native (Prebid + Google Ad Manager).
+  source: https://registry.npmjs.org/@ezoic/react-native-sdk
+- language: typescript
+  registry: npm
+  name: '@ezoic/react-sdk'
+  url: https://www.npmjs.com/package/@ezoic/react-sdk
+  repo: https://github.com/ezoic/ezoic-react-sdk
+  install: npm install @ezoic/react-sdk
+  version: 1.0.0
+  published: '2026-07-22'
+  official: true
+  description: Ezoic SDK for React — display, rewarded and video ads plus CMP, integrated natively.
+  source: https://registry.npmjs.org/@ezoic/react-sdk
   note: >-
-    Native mobile ad SDKs documented at docs.ezoic.com/docs/mobileapps/ (Android, iOS
-    via Swift Package Manager, Flutter, Unity). Distribution channels vary by platform;
-    only first-party artifacts with confirmed registry/repo URLs are listed above.
+    Now published to npm (round 1 recorded it as GitHub-only). npm latest 1.0.0 lags the
+    repo, whose newest release is v1.0.2 dated 2026-08-07.
+- language: typescript
+  registry: npm
+  name: '@ezoic/vue-sdk'
+  url: https://www.npmjs.com/package/@ezoic/vue-sdk
+  repo: https://github.com/ezoic/ezoic-vue-sdk
+  install: npm install @ezoic/vue-sdk
+  version: 1.0.0
+  published: '2026-07-22'
+  official: true
+  description: Ezoic SDK for Vue 3 — display, rewarded and video ads plus CMP, integrated natively.
+  source: https://registry.npmjs.org/@ezoic/vue-sdk
+  note: Now published to npm (round 1 recorded it as GitHub-only). Matches repo release v1.0.0.
+- language: typescript
+  registry: github
+  name: '@ezoic/angular-sdk'
+  url: https://github.com/ezoic/ezoic-angular-sdk
+  repo: https://github.com/ezoic/ezoic-angular-sdk
+  install: npm install @ezoic/angular-sdk
+  version: 1.0.0
+  published: '2026-07-03'
+  official: true
+  description: Ezoic SDK for Angular — display, rewarded and video ads plus CMP, integrated natively.
+  source: https://github.com/ezoic/ezoic-angular-sdk/releases
+  note: >-
+    NOT on npm — https://registry.npmjs.org/@ezoic/angular-sdk returns 404, so the
+    documented install command fails. Version and date are the GitHub release v1.0.0.
+- language: dart
+  registry: git
+  name: ezoic_flutter_sdk
+  url: https://github.com/ezoic/flutter-sdk
+  repo: https://github.com/ezoic/flutter-sdk
+  install: 'pubspec.yaml dependency via git: https://github.com/ezoic/flutter-sdk'
+  version: 1.5.0
+  published: null
+  official: true
+  description: Ezoic Ads SDK for Flutter (Prebid + Google Ad Manager banner, native, interstitial and rewarded ads).
+  source: https://github.com/ezoic/flutter-sdk (pubspec.yaml, tag v1.5.0)
+  note: >-
+    Deliberately not on pub.dev — the pubspec carries `publish_to: none`, and pub.dev
+    returns 404 for every Ezoic name searched. Version read from pubspec.yaml and
+    corroborated by git tag v1.5.0; no publish date exists because there is no registry
+    release, so `published` is null.
+- language: csharp
+  registry: upm
+  name: com.ezoic.ads
+  url: https://github.com/ezoic/ezoic-unity-sdk
+  repo: https://github.com/ezoic/ezoic-unity-sdk
+  install: Unity Package Manager — add from git URL https://github.com/ezoic/ezoic-unity-sdk.git
+  version: 1.0.1
+  published: '2026-07-05'
+  official: true
+  description: Ezoic Ads SDK for Unity — banner, interstitial and rewarded ads.
+  source: https://github.com/ezoic/ezoic-unity-sdk/releases
+  note: >-
+    Unity Package Manager git distribution; there is no UPM registry metadata endpoint to
+    query. Newest tag is v1.0.1; the newest tagged RELEASE is v1.0.0 dated 2026-07-05, so
+    the date belongs to 1.0.0 and 1.0.1 is untagged-as-release.
+  examples: https://github.com/ezoic/ezoic-unity-sdk-example
+- language: swift
+  registry: swiftpm
+  name: ezoic-swift-sdk-dist
+  url: https://github.com/ezoic/ezoic-swift-sdk-dist
+  repo: https://github.com/ezoic/ezoic-swift-sdk-dist
+  install: Swift Package Manager — https://github.com/ezoic/ezoic-swift-sdk-dist
+  version: 1.5.0
+  published: '2026-07-05'
+  official: true
+  description: >-
+    Public SwiftPM distribution of the Ezoic Ads SDK for iOS — pre-built XCFramework
+    releases for closed-source consumption.
+  source: https://github.com/ezoic/ezoic-swift-sdk-dist/releases
+  note: >-
+    Binary distribution only. The source repo (github.com/ezoic/ezoic-swift-sdk) is
+    private, so the shipped artifact cannot be built or audited from source.
+mcp_distribution:
+  note: >-
+    Both Ezoic MCP servers are REMOTE endpoints, not installable packages — there is no
+    npm/PyPI MCP package to record. The two GitHub repos below are install/config shells
+    (README + mcp.json + Cursor plugin metadata) around a hosted server.
+  repos:
+  - https://github.com/ezoic/bda-mcp-public
+  - https://github.com/ezoic/ezoic-setup-mcp
+  see_also: mcp/ezoic-mcp.yml
+server_side_sdks:
+  note: >-
+    Ezoic publishes NO server-side client libraries for its REST APIs. Big Data Analytics,
+    CDN and Subscriptions are all documented with raw curl/Python/PHP request examples
+    rather than a wrapped SDK, in any language.
+  count: 0
+native_mobile:
+  note: >-
+    Android is documented at https://docs.ezoic.com/docs/mobileapps/ but no public Maven
+    coordinate or artifact repository is named on the docs or in the GitHub org, so no
+    entry is recorded for it rather than guessing one.

@@ -1,0 +1,61 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://docs.ezoic.com/docs/api/ , https://docs.ezoic.com/docs/api/bdaservices/ ,
+  https://docs.ezoic.com/docs/api/cdn/ ,
+  https://docs.ezoic.com/docs/subscriptions/rest-api/ ,
+  https://docs.ezoic.com/docs/analytics-mcp/
+summary: >-
+  Ezoic publishes no rate limits for any of its APIs. Every page of the API section, the
+  Subscriptions REST API reference and the Analytics MCP overview was read: none names a
+  request ceiling, a window, a burst allowance, a 429, a Retry-After, or any
+  X-RateLimit-*/RateLimit-* response header. The only volume controls Ezoic documents are
+  request-shaped, not policy-shaped — pagination on Big Data Analytics and a batch size on
+  the CDN bulk endpoint — and those are recorded below so a consumer can at least size
+  their calls.
+limit_count: 0
+limits: []
+headers:
+  documented: false
+  request_id: null
+  note: No rate-limit response headers are documented on any Ezoic API.
+exhaustion:
+  status_code: null
+  documented: false
+observed:
+  note: >-
+    Not probed against a live authenticated call. Every unauthenticated request to
+    https://api-gateway.ezoic.com returns 503 "Developer key is empty." before routing, so
+    no response headers from a real service call could be observed anonymously.
+  evidence:
+  - url: https://api-gateway.ezoic.com/subscriptions/v1/access
+    http_status: 503
+    body: Developer key is empty.
+    checked: '2026-08-13'
+volume_controls_documented:
+- api: Big Data Analytics
+  control: pagination
+  detail: >-
+    getdata requires a MaxItems value; some reports (for example when using URL as a
+    dimension) return thousands of rows, so callers paginate by incrementing StartItem.
+    getCustomData accepts the same pair, and omitting both (or setting both to 0) returns
+    all rows.
+  source: https://docs.ezoic.com/docs/api/bdaservices/
+- api: CDN
+  control: batch size
+  detail: bulkclearcache clears an array of URLs in batches of 100.
+  source: https://docs.ezoic.com/docs/api/cdn/
+- api: Subscriptions
+  control: no caching
+  detail: >-
+    Reads are served with Cache-Control:no-store and Ezoic explicitly tells callers to
+    call per decision rather than cache — a documented instruction to raise call volume,
+    with no published ceiling to raise it against.
+  source: https://docs.ezoic.com/docs/subscriptions/rest-api/
+access_gate:
+  note: >-
+    In place of a rate limit, Ezoic gates by entitlement: each API-gateway service is off
+    until enabled under Settings -> API Access, the developerKey is validated per service,
+    and the gateway rejects any domain that does not belong to the key's account before
+    the request reaches the service.
+  source: https://docs.ezoic.com/docs/api/

@@ -1,0 +1,124 @@
+generated: '2026-08-13'
+method: probed
+source: https://token.ezoic.com/.well-known/oauth-authorization-server
+docs: https://docs.ezoic.com/docs/analytics-mcp/
+note: >-
+  Ezoic runs a real OAuth 2.0 authorization server at token.ezoic.com and publishes RFC
+  8414 metadata for it, but that metadata omits scopes_supported and Ezoic publishes no
+  scope reference page. The access token issued to an MCP client is described in prose as
+  "a scoped access token", and the gate is an Ezoic ROLE PERMISSION ("Analytics"), not a
+  named OAuth scope a client can request. So there is nothing to enumerate: scope_count
+  is 0 by measurement, not by omission.
+authorization_server:
+  issuer: https://token.ezoic.com
+  metadata: https://token.ezoic.com/.well-known/oauth-authorization-server
+  authorization_endpoint: https://token.ezoic.com/authorize
+  token_endpoint: https://token.ezoic.com/token
+  revocation_endpoint: https://token.ezoic.com/token/revoke
+  registration_endpoint: https://token.ezoic.com/register
+  device_authorization_endpoint: https://token.ezoic.com/device_authorization
+  jwks_uri: https://token.ezoic.com/.well-known/jwks.json
+  scopes_supported: null
+  scopes_supported_note: Field absent from the published metadata document.
+  grant_types_supported:
+  - authorization_code
+  - client_credentials
+  - refresh_token
+  - urn:ietf:params:oauth:grant-type:token-exchange
+  - urn:ietf:params:oauth:grant-type:device_code
+  - personal_access_token
+  - urn:bidsystem:params:oauth:grant-type:adcp-client-recovery
+  response_types_supported: [code]
+  code_challenge_methods_supported: [S256]
+  token_endpoint_auth_methods_supported: [none, private_key_jwt]
+  token_endpoint_auth_signing_alg_values_supported: [ES256]
+  id_token_signing_alg_values_supported: [ES256]
+  dpop_signing_alg_values_supported: [ES256]
+  subject_types_supported: [public]
+  client_metadata_document_supported: false
+second_authorization_server:
+  issuer: https://token.bidsystem.ai
+  metadata: https://token.bidsystem.ai/.well-known/oauth-authorization-server
+  applies_to: bidsystem.ai — Ezoic's performance advertising (buy-side) platform
+  ownership: >-
+    Different domain, same company. bidsystem.ai's homepage states "bidsystem.ai is
+    Ezoic's performance advertising platform"; ezoic.com's homepage "Get Started" CTA
+    links to https://admin.bidsystem.ai/register; and token.ezoic.com itself advertises
+    the vendor grant urn:bidsystem:params:oauth:grant-type:adcp-client-recovery.
+  configuration: >-
+    Identical to token.ezoic.com in every field except issuer and endpoint hostnames —
+    same grants, same S256-only PKCE, same ES256 DPoP, same dynamic client registration,
+    same auth methods. One authorization codebase, two brands.
+  scopes_supported: null
+protected_resources:
+- resource: https://analytics-mcp.ezoic.com
+  metadata: https://analytics-mcp.ezoic.com/.well-known/oauth-protected-resource
+  bearer_methods_supported: [header]
+  authorization_servers: [https://token.ezoic.com]
+  scopes_supported: null
+- resource: https://api.bidsystem.ai/mcp
+  metadata: https://api.bidsystem.ai/.well-known/oauth-protected-resource
+  bearer_methods_supported: [header]
+  authorization_servers: [https://token.bidsystem.ai]
+  scopes_supported: [openid, profile]
+  note: >-
+    The only Ezoic-family resource that names any scope — and the two it names are the
+    OIDC identity scopes, not authorization scopes over advertising data. So even here,
+    nothing describes what an access token is permitted to DO.
+scopes:
+- name: openid
+  description: Standard OIDC scope. Published only by the bidsystem.ai MCP protected resource.
+  resource: https://api.bidsystem.ai/mcp
+  source: https://api.bidsystem.ai/.well-known/oauth-protected-resource
+  method: probed
+- name: profile
+  description: Standard OIDC scope. Published only by the bidsystem.ai MCP protected resource.
+  resource: https://api.bidsystem.ai/mcp
+  source: https://api.bidsystem.ai/.well-known/oauth-protected-resource
+  method: probed
+scope_count: 2
+scope_count_note: >-
+  Both are generic OIDC identity scopes discovered by probe, not an Ezoic authorization
+  vocabulary. No Ezoic-authored scope exists on any surface, and no scope reference page is
+  published.
+permissions:
+  note: >-
+    Authorization is enforced through Ezoic account roles rather than OAuth scopes.
+    Documented at https://docs.ezoic.com/docs/analytics-mcp/.
+  model:
+  - name: Analytics
+    effect: >-
+      A publisher user (a team member on someone else's Ezoic account) can connect the
+      Analytics MCP only if their Ezoic role includes analytics access — matching what
+      they can already see in the Ezoic dashboard. Account owners manage team permissions
+      under Account -> Privacy & Security -> Manage Users.
+    surface: https://analytics-mcp.ezoic.com/mcp
+  - name: 'API Access (per service)'
+    effect: >-
+      Not OAuth. Each API-gateway service (Big Data Analytics, CDN, Subscriptions) is off
+      until a publisher turns it on under Settings -> API Access; the shared developerKey
+      can only call enabled services, and only for domains on its own account.
+    surface: https://api-gateway.ezoic.com
+    docs: https://docs.ezoic.com/docs/api/
+observations:
+  strong:
+  - PKCE (S256) is the only code challenge method offered — no plain.
+  - DPoP sender-constrained tokens are supported (ES256).
+  - Dynamic client registration (RFC 7591) is available at /register, which is what lets an
+    MCP client connect without a pre-provisioned client_id.
+  - Token revocation (RFC 7009) is published.
+  notable:
+  - >-
+    A vendor-specific grant type is advertised on BOTH authorization servers —
+    urn:bidsystem:params:oauth:grant-type:adcp-client-recovery — indicating Ezoic's token
+    service fronts an Ad Context Protocol (AdCP) bidding client. No AdCP discovery
+    document is published on any host probed (/.well-known/adcp.json 404s on both
+    ezoic.com and api.bidsystem.ai), so this is recorded as an observation, not as a
+    catalogued API. It is, however, the thread that led to the third MCP server.
+  - >-
+    The bidsystem.ai advertiser console carries a Chrome WebMCP origin-trial token
+    (feature "WebMCP", origin https://admin.bidsystem.ai:443, expiry 2026-11-17) — Ezoic is
+    trialling in-page agent tool exposure alongside its server-side MCP endpoints.
+  - No OIDC. /.well-known/openid-configuration 404s on both token.ezoic.com and
+    login.ezoic.com, yet id_token_signing_alg_values_supported is present in the OAuth
+    metadata — an OIDC-shaped field on a non-OIDC discovery document.

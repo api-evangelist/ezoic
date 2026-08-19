@@ -1,0 +1,73 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Ezoic Subscriptions Server-to-Server REST Access API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "developerKey",
+      "value": "{{developerKey}}",
+      "placement": "query"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Access",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Check reader access to a product or item",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-gateway.ezoic.com/subscriptions/v1/access",
+            "headers": [
+              {
+                "name": "X-Ezoic-Reader-Email",
+                "value": ""
+              },
+              {
+                "name": "X-Ezoic-Reader-Token",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "developerKey",
+                "value": "",
+                "type": "query",
+                "description": "Your Ezoic API key."
+              },
+              {
+                "name": "domain",
+                "value": "",
+                "type": "query",
+                "description": "The domain being queried (must belong to your account)."
+              },
+              {
+                "name": "product",
+                "value": "",
+                "type": "query",
+                "description": "Product handle to check access for (supply product OR item)."
+              },
+              {
+                "name": "item",
+                "value": "",
+                "type": "query",
+                "description": "One-time item key to check access for (supply product OR item)."
+              }
+            ]
+          },
+          "docs": "Returns an allow/deny access decision for the identified reader against a subscription product handle or a one-time item key. Exactly one reader identity header must be supplied."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

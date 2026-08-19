@@ -1,0 +1,150 @@
+generated: '2026-08-13'
+method: derived
+source: >-
+  mcp/ezoic-mcp.yml , mcp/ezoic-setup-mcp-tools.json ,
+  openapi/ezoic-big-data-analytics-api-openapi.yml ,
+  openapi/ezoic-access-api-openapi.yml , openapi/ezoic-products-api-openapi.yml ,
+  openapi/ezoic-purchases-api-openapi.yml , openapi/ezoic-cdn-api-openapi.yml
+note: >-
+  Ezoic's Analytics MCP and its Big Data Analytics REST API are two front doors onto the
+  same warehouse — Ezoic says so itself ("the same data that powers Big Data Analytics in
+  your Ezoic account"). Every analytics tool therefore binds to the BDA data operations.
+  The binding is by semantics, not by an observed schema: the Analytics tools/list is
+  OAuth-gated (401), so confidence is set accordingly and no inputSchema is claimed for
+  those tools. The Setup Assistant's tools ARE live-introspected, and they bind to
+  nothing in REST — that server is a retrieval agent over documentation, not a wrapper.
+
+surfaces:
+  openapi:
+  - file: openapi/ezoic-big-data-analytics-api-openapi.yml
+    base: https://api-gateway.ezoic.com
+    gated: false
+    note: Spec is public documentation; calling it needs an account developerKey.
+  - file: openapi/ezoic-cdn-api-openapi.yml
+    base: https://api-gateway.ezoic.com
+    gated: false
+  - files:
+    - openapi/ezoic-access-api-openapi.yml
+    - openapi/ezoic-products-api-openapi.yml
+    - openapi/ezoic-purchases-api-openapi.yml
+    base: https://api-gateway.ezoic.com/subscriptions/v1
+    gated: false
+  mcp:
+  - url: https://analytics-mcp.ezoic.com/mcp
+    gated: true
+    gate: OAuth 2.0 (RFC 9728 protected resource, AS https://token.ezoic.com)
+  - url: https://setup-agent.ezoic.com/mcp
+    gated: false
+    gate: none — anonymous
+  graphql: none published
+
+crosswalk:
+- tool: available_domains
+  server: ezoic-analytics
+  category: discovery
+  rest: []
+  binding: none
+  confidence: high
+  note: >-
+    No REST equivalent. The BDA API takes DomainId as an input but publishes no
+    list-domains operation, so the MCP exposes account scope that REST does not.
+- tool: pageview_data
+  server: ezoic-analytics
+  category: analytics
+  rest: [getCustomData, getData]
+  binding: semantic
+  confidence: medium
+  note: >-
+    Traffic/engagement/EPMV metrics. In REST these are MetricColumns (visits, pageviews,
+    engaged_time, epmv) on getCustomData, or the revenueDaily-family predefined reports
+    via getData. The tool's dimension/filter/sort surface maps to DimensionColumns,
+    Filters and Order.
+- tool: ad_impression_data
+  server: ezoic-analytics
+  category: analytics
+  rest: [getCustomData, getData]
+  binding: semantic
+  confidence: medium
+  note: Impressions, clicks, viewability, RPM and ad revenue are MetricColumns; ad unit and placement are DimensionColumns.
+- tool: rewarded_ad_data
+  server: ezoic-analytics
+  category: analytics
+  rest: [getCustomData]
+  binding: semantic
+  confidence: medium
+  note: >-
+    The BDA docs name reward_id as a dimension and reward_revenue as a metric on
+    getCustomData, which is the closest published REST expression of this tool.
+- tool: video_data
+  server: ezoic-analytics
+  category: analytics
+  rest: [getCustomData, getData]
+  binding: semantic
+  confidence: low
+  note: Video plays, completions, watch time, revenue and CPM are not named as columns in the public BDA column list; the mapping is inferred from Ezoic's statement that both surfaces read the same warehouse.
+- tool: shared_video_data
+  server: ezoic-analytics
+  category: analytics
+  rest: [getCustomData]
+  binding: semantic
+  confidence: low
+  note: Performance of the publisher's videos on other sites. No published REST column set names this dataset.
+- tool: ask
+  server: ezoic-setup
+  category: documentation-agent
+  rest: []
+  binding: none
+  confidence: high
+  note: Retrieval/generation over Ezoic implementation documentation. Nothing in REST corresponds.
+- tool: request_status
+  server: ezoic-setup
+  category: job-control
+  rest: []
+  binding: none
+  confidence: high
+- tool: read_response
+  server: ezoic-setup
+  category: job-control
+  rest: []
+  binding: none
+  confidence: high
+- tool: help
+  server: ezoic-setup
+  category: meta
+  rest: []
+  binding: none
+  confidence: high
+
+mcp_only:
+- tool: available_domains
+  reason: No published REST list-domains operation on the API gateway.
+- tool: ask
+  reason: Documentation-retrieval agent; no REST counterpart exists.
+- tool: request_status
+  reason: Async job control internal to the Setup Assistant.
+- tool: read_response
+  reason: Async job control internal to the Setup Assistant.
+- tool: help
+  reason: MCP protocol affordance.
+
+rest_only:
+- operations: [getReports, getReport, getCustomReports, createCustomReport, getColumns]
+  reason: Report definition management. The Analytics MCP is read-only over data and exposes no report CRUD.
+- operations: [getSegments, createSegment, getMultiFilters, getMultiFilterTypes]
+  reason: Segment and filter construction. The MCP applies breakdowns conversationally rather than exposing segment CRUD.
+- operations: [checkAccess, listProducts, listPurchases]
+  reason: Ezoic Subscriptions entitlement reads. No MCP surface covers subscriptions.
+- operations: [cdnPing, clearCache, bulkClearCache, clearBySurrogateKeys, purgeCache]
+  reason: CDN cache invalidation is a write surface; no MCP server exposes it.
+
+coverage:
+  mcp_tools_total: 10
+  mcp_tools_bound_to_rest: 5
+  mcp_tools_unbound: 5
+  rest_operations_total: 19
+  rest_operations_with_a_tool: 2
+  rest_operations_without_a_tool: 17
+  note: >-
+    Read as a ratio, Ezoic's agent surface is narrow but deliberate: it publishes
+    read-only analytics to agents and keeps every write path (report CRUD, segments, CDN
+    purge) and the whole Subscriptions entitlement surface REST-only.

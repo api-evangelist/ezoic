@@ -1,0 +1,465 @@
+openapi: 3.1.0
+info:
+  title: Ezoic Big Data Analytics API
+  version: v1
+  description: >-
+    REST API for pulling the same reports and analytics data a publisher sees in the
+    Ezoic dashboard — predefined reports that ship with the account, and custom reports
+    the publisher builds. Endpoints live under /bdaservices/ on the Ezoic API gateway and
+    are authenticated with the shared Ezoic API-gateway developerKey. Faithfully modeled
+    from the public documentation at https://docs.ezoic.com/docs/api/bdaservices/ — every
+    path, request field and enumerated value below is stated on that page or the API
+    landing page at https://docs.ezoic.com/docs/api/.
+  x-apievangelist-method: generated
+  x-apievangelist-source: https://docs.ezoic.com/docs/api/bdaservices/
+  contact:
+    name: Ezoic Support
+    url: https://support.ezoic.com/
+servers:
+- url: https://api-gateway.ezoic.com
+  description: Ezoic API gateway (production)
+security:
+- developerKey: []
+tags:
+- name: Reports
+  description: Predefined and custom report definitions.
+- name: Data
+  description: Pulling report data and ad-hoc custom data.
+- name: Segments
+  description: Segments that split report data into categories.
+- name: Filters
+  description: Multifilters and multifilter types used to build segments.
+paths:
+  /bdaservices/getreports/:
+    get:
+      operationId: getReports
+      summary: List predefined report names
+      description: Returns the list of predefined report names available on the account.
+      tags:
+      - Reports
+      parameters:
+      - $ref: '#/components/parameters/developerKey'
+      responses:
+        '200':
+          description: A list of predefined report names.
+          content:
+            application/json: {}
+  /bdaservices/getreport/:
+    get:
+      operationId: getReport
+      summary: Get a predefined report definition
+      description: >-
+        Returns the definition of a single predefined report, including its
+        DateBaseSelectId (BASE_NOT_SELECTED means the report carries no built-in date
+        range and getdata must be given one).
+      tags:
+      - Reports
+      parameters:
+      - $ref: '#/components/parameters/developerKey'
+      - name: reportName
+        in: query
+        required: true
+        description: The predefined report name, for example revenueDaily.
+        schema:
+          type: string
+          example: revenueDaily
+      responses:
+        '200':
+          description: The report definition.
+          content:
+            application/json: {}
+  /bdaservices/getcustomreports/:
+    get:
+      operationId: getCustomReports
+      summary: List custom reports
+      description: Returns all custom reports on the account, with their ids and names.
+      tags:
+      - Reports
+      parameters:
+      - $ref: '#/components/parameters/developerKey'
+      responses:
+        '200':
+          description: The account's custom reports.
+          content:
+            application/json: {}
+  /bdaservices/createcustomreport/:
+    post:
+      operationId: createCustomReport
+      summary: Create a custom report
+      description: >-
+        Create a saved custom report, choosing its dimension and metric columns, its
+        segments, its sort order, and an optional default date range. Returns the new
+        custom report's id.
+      tags:
+      - Reports
+      parameters:
+      - $ref: '#/components/parameters/developerKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - ReportTitle
+              - Charts
+              properties:
+                ReportTitle:
+                  type: string
+                  example: My Custom Revenue Report
+                ReportDateRange:
+                  type: object
+                  description: >-
+                    Default date range for the report. Setting BaseSelectId to BASE_LAST_7
+                    means a getdata request with no dates defaults to the last seven days.
+                  properties:
+                    BaseSelectId:
+                      type: string
+                      example: BASE_LAST_7
+                Charts:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      Name:
+                        type: string
+                      DimensionColumns:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Column'
+                      MetricColumns:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Column'
+                      Segments:
+                        type: array
+                        items:
+                          type: object
+                      Order:
+                        $ref: '#/components/schemas/Order'
+      responses:
+        '200':
+          description: The created custom report, including its id.
+          content:
+            application/json: {}
+  /bdaservices/getcolumns/:
+    get:
+      operationId: getColumns
+      summary: List available report columns
+      description: >-
+        Returns the dimension and metric columns available for building custom reports,
+        for example report_day, visits, pageviews, revenue, epmv,
+        copy_paste_per_pageview.
+      tags:
+      - Reports
+      parameters:
+      - $ref: '#/components/parameters/developerKey'
+      responses:
+        '200':
+          description: The available columns.
+          content:
+            application/json: {}
+  /bdaservices/getdata/:
+    post:
+      operationId: getData
+      summary: Get data for a predefined or custom report
+      description: >-
+        Pull the rows for a report. Identify the report with either reportName (a
+        predefined report) or customReportId (a saved custom report). MaxItems is
+        required; paginate large result sets by incrementing StartItem. A date range is
+        required when the report has no built-in one (DateBaseSelectId
+        BASE_NOT_SELECTED).
+      tags:
+      - Data
+      parameters:
+      - $ref: '#/components/parameters/developerKey'
+      - name: reportName
+        in: query
+        required: false
+        description: A predefined report name. Supply reportName OR customReportId.
+        schema:
+          type: string
+          example: revenueDaily
+      - name: customReportId
+        in: query
+        required: false
+        description: A saved custom report id. Supply reportName OR customReportId.
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - MaxItems
+              properties:
+                StartItem:
+                  type: integer
+                  description: First row to return (pagination cursor).
+                  example: 0
+                MaxItems:
+                  type: integer
+                  description: Maximum rows to return. Required.
+                  example: 10
+                Platform:
+                  $ref: '#/components/schemas/Platform'
+                DomainId:
+                  type: integer
+                  description: The site to query.
+                DateGrouping:
+                  $ref: '#/components/schemas/DateGrouping'
+                SegmentIds:
+                  type: array
+                  description: >-
+                    Optional segment ids. Splits a single row into multiple segments.
+                    When a custom report embeds segments, those are used if none are
+                    supplied here; otherwise the request's segments take precedence.
+                  items:
+                    type: integer
+                StartDate:
+                  type: string
+                  format: date
+                  example: '2018-10-01'
+                EndDate:
+                  type: string
+                  format: date
+                  example: '2018-10-01'
+      responses:
+        '200':
+          description: The report rows.
+          content:
+            application/json: {}
+  /bdaservices/getCustomData/:
+    post:
+      operationId: getCustomData
+      summary: Get custom data without a saved report
+      description: >-
+        Pull data in one call without first creating a saved custom report, by naming the
+        dimension and metric columns inline.
+      tags:
+      - Data
+      parameters:
+      - $ref: '#/components/parameters/developerKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - StartDate
+              - EndDate
+              - DimensionColumns
+              - MetricColumns
+              properties:
+                StartItem:
+                  type: integer
+                  description: First row to return (pagination). Omit both StartItem and MaxItems, or set both to 0, to return all rows.
+                MaxItems:
+                  type: integer
+                  description: Maximum rows to return (pagination).
+                Platform:
+                  $ref: '#/components/schemas/Platform'
+                DomainId:
+                  type: integer
+                  description: Site to query. Omit to include all sites on the account.
+                StartDate:
+                  type: string
+                  format: date
+                  example: '2026-07-24'
+                EndDate:
+                  type: string
+                  format: date
+                  example: '2026-07-30'
+                SegmentIds:
+                  type: array
+                  description: Segment IDs. Defaults to All Users ([1]) when empty.
+                  items:
+                    type: integer
+                DimensionColumns:
+                  type: array
+                  description: Grouping columns, for example report_day or reward_id.
+                  items:
+                    $ref: '#/components/schemas/Column'
+                MetricColumns:
+                  type: array
+                  description: Metrics to return, for example revenue or reward_revenue.
+                  items:
+                    $ref: '#/components/schemas/Column'
+                Order:
+                  $ref: '#/components/schemas/Order'
+                Filters:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Filter'
+                RevenueDecimalPlaces:
+                  type: integer
+                  description: 2-6 decimal places for USD metrics. Omit (or 0) for the default of 2.
+                  minimum: 0
+                  maximum: 6
+      responses:
+        '200':
+          description: The requested rows.
+          content:
+            application/json: {}
+  /bdaservices/getsegments/:
+    get:
+      operationId: getSegments
+      summary: List segments
+      description: >-
+        Returns both custom segments created on the account and premade ones, such as
+        "All Users" (no filter) and "Desktop Traffic".
+      tags:
+      - Segments
+      parameters:
+      - $ref: '#/components/parameters/developerKey'
+      responses:
+        '200':
+          description: The available segments.
+          content:
+            application/json: {}
+  /bdaservices/createsegment/:
+    post:
+      operationId: createSegment
+      summary: Create a segment
+      description: >-
+        Create a segment from multifilters (preset groups such as device, country,
+        gender, site) and/or filters (an operation such as greater than, contains,
+        matches exactly). Returns the segment object with its id filled in.
+      tags:
+      - Segments
+      parameters:
+      - $ref: '#/components/parameters/developerKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - SegmentName
+              properties:
+                SegmentName:
+                  type: string
+                  example: US and Canada
+                SegmentMultiFilters:
+                  type: object
+                  description: >-
+                    Map of MultiFilterId to the filter values selected for it. The Country
+                    multifilter's option keys are two-character country codes.
+                  additionalProperties:
+                    type: object
+                    properties:
+                      FilterValues:
+                        type: array
+                        items:
+                          type: string
+      responses:
+        '200':
+          description: The created segment, including its id.
+          content:
+            application/json: {}
+  /bdaservices/getmultifilters/:
+    get:
+      operationId: getMultiFilters
+      summary: List multifilters
+      description: >-
+        Returns the multifilters available for building segments — preset groups such as
+        Country, device, gender and site — each with a FilterName, MultiFilterId and
+        MultiFilterTypeId.
+      tags:
+      - Filters
+      parameters:
+      - $ref: '#/components/parameters/developerKey'
+      responses:
+        '200':
+          description: The available multifilters.
+          content:
+            application/json: {}
+  /bdaservices/getmultifiltertypes/:
+    get:
+      operationId: getMultiFilterTypes
+      summary: List multifilter types and their options
+      description: >-
+        Returns the option keys available for each multifilter type. Multifilter type 1
+        maps to the Country filter, whose option keys are two-character country codes.
+      tags:
+      - Filters
+      parameters:
+      - $ref: '#/components/parameters/developerKey'
+      responses:
+        '200':
+          description: The multifilter types and their options.
+          content:
+            application/json: {}
+components:
+  parameters:
+    developerKey:
+      name: developerKey
+      in: query
+      required: true
+      description: >-
+        Your Ezoic API key, from Settings -> API Access in the Ezoic dashboard. Shared
+        across every Ezoic API-gateway service you have enabled.
+      schema:
+        type: string
+  schemas:
+    Platform:
+      type: string
+      description: Which platform's data to return. ALL is the combined figure.
+      enum:
+      - EZOIC
+      - ORIG
+      - ALL
+    DateGrouping:
+      type: string
+      description: Whether data is grouped by day, week, or month.
+      example: DAILY
+    Column:
+      type: object
+      description: A dimension or metric column.
+      properties:
+        Data:
+          type: string
+          example: report_day
+        Type:
+          type: string
+          example: string
+    Order:
+      type: object
+      description: Sort by column index and direction.
+      properties:
+        ColumnNumber:
+          type: integer
+          example: 0
+        Direction:
+          type: string
+          enum:
+          - ASC
+          - DESC
+    Filter:
+      type: object
+      description: A row filter applied to a column.
+      properties:
+        Type:
+          type: string
+          enum:
+          - INCLUDE
+          - EXCLUDE
+        FilterKey:
+          type: string
+          example: epmv
+        OperationId:
+          type: string
+          example: GREATER
+        FilterValue:
+          type: string
+          example: '3'
+  securitySchemes:
+    developerKey:
+      type: apiKey
+      in: query
+      name: developerKey
+      description: Your Ezoic API-gateway developer key, passed as a query parameter.

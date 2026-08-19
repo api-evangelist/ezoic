@@ -1,0 +1,77 @@
+generated: '2026-08-13'
+method: searched
+source: https://www.ezoic.com/pricing
+docs: https://www.ezoic.com/pricing
+summary: >-
+  Ezoic publishes no prices. Its /pricing page is a services-tier page, not a price list:
+  tiers are assigned by the publisher's average monthly users, there is a hard 250,000
+  monthly-user eligibility floor to work with Ezoic at all, and there is no self-serve
+  paid plan, no per-call API price, and no free developer tier. Monetization is a revenue
+  relationship with the publisher, so the API surface (Big Data Analytics, CDN,
+  Subscriptions, Analytics MCP) carries no separate price — it is included with the
+  account and each service is switched on from Settings -> API Access.
+model: revenue-share / managed-service tiers
+currency: null
+prices_published: false
+eligibility_floor:
+  metric: average monthly users
+  minimum: 250000
+  note: >-
+    Stated verbatim on the pricing page: "Services are determined by your businesses
+    average monthly users -- with 250,000/mo being the required minimum."
+plan_count: 3
+plans:
+- name: VIP & Enterprise
+  price: null
+  currency: null
+  billing_period: null
+  eligibility: 1,000,000+ monthly users
+  support: Dedicated Strategy Team & 24/7 Support
+  included:
+  - Dedicated Brand and Agency Sales Team
+  - Exclusive Events & Opportunities
+  - Audience, Traffic, and Revenue Consulting
+  - Custom Integration & Technical Support
+  - Priority Access to New Features
+  api_access: Included with the account; each API-gateway service enabled individually.
+- name: Business
+  price: null
+  currency: null
+  billing_period: null
+  eligibility: '>250,000 monthly users'
+  support: Dedicated Onboarding, Account Specialist, Strategic Management
+  included:
+  - Direct Ad Sales Team Dedicated to Your Account
+  - Personalized Revenue Strategy Sessions
+  - Custom First-Party Data and Ad Operations Planning
+  - Access to Leading Ad Partners Including Google AdX
+  - Video Ads and Video Player
+  api_access: Included with the account; each API-gateway service enabled individually.
+- name: Ezoic Incubator Program
+  price: null
+  currency: null
+  billing_period: null
+  eligibility: Below the 250,000 monthly-user floor
+  support: Limited self-service
+  note: >-
+    Described verbatim as a "Limited self-service option for smaller publishers. Highly
+    selective, ~10-20 applicants accepted monthly." This is the only route in under the
+    eligibility floor, and it is capped by acceptance rate rather than price.
+  api_access: Not specified.
+api_pricing:
+  metered: false
+  free_tier: false
+  note: >-
+    No per-request, per-report or per-token price is published for the Big Data Analytics
+    API, the CDN API, the Subscriptions REST API, or the Analytics MCP server. Access is a
+    property of holding an eligible Ezoic publisher account and toggling the service on.
+  see_also: rate-limits/ezoic-rate-limits.yml
+subscriptions_product_note: >-
+  Ezoic Subscriptions is a paywall product publishers sell THROUGH — the publisher sets
+  their own product prices in the Subscriptions Manager. Those are the publisher's prices,
+  not Ezoic's, and are out of scope for this artifact.
+conversion_paths:
+- label: Apply Now
+  url: https://www.ezoic.com/pricing
+- label: Contact Sales
+  url: https://www.ezoic.com/pricing

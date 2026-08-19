@@ -3,7 +3,7 @@
 > Agent-readable index for https://docs.ezoic.com/. This file is generated automatically from the Hugo documentation tree.
 > For the complete documentation export, see https://docs.ezoic.com/llms-full.txt.
 
-## Setup
+## EzoicAds
 - [Preface](https://docs.ezoic.com/docs/ezoicads/getting-started/): What to have ready before setting up EzoicAds on your site.
 - [Step 1: Ads.txt Setup](https://docs.ezoic.com/docs/ezoicads/adstxt/): Set up ads.txt for Ezoic to maximize ad revenue. Learn WordPress plugin setup, server redirects, and automated updates. Easy configuration for all platforms.
 - [Step 2: Site Integration](https://docs.ezoic.com/docs/ezoicads/integration/): Complete guide to integrating Ezoic ads using JavaScript. Add header scripts, configure privacy settings, and implement ad placements on any website or CMS platform.
@@ -14,11 +14,13 @@
 ## Privacy
 - [GDPR Compliance](https://docs.ezoic.com/docs/privacy/gdpr/):  Compliance Privacy Policy You must provide Ezoic with the link to your privacy policy. This can be done at https://pubdash.ezoic.com/settings/privacy/privacypolicy. Your privacy policy must also include additional wording specific to …
 
-## Advanced
+## EzoicAds Advanced
+- [Ad Options Builder](https://docs.ezoic.com/docs/ezoicadsadvanced/wordpress/ad-options-builder/): Generate the advanced ad options JSON for a WordPress ad placement.
 - [Anchor Ads](https://docs.ezoic.com/docs/ezoicadsadvanced/anchor-ads/): Control how Ezoic anchor ads appear on your site.
 - [Ezoic Video](https://docs.ezoic.com/docs/ezoicadsadvanced/ezoic-video/): Add the Ezoic Video player to your website.
 - [Advanced](https://docs.ezoic.com/docs/ezoicadsadvanced/advanced/): Advanced options for fine-tuning how EzoicAds behave on your site.
 - [Ad Slot Complete Event](https://docs.ezoic.com/docs/ezoicadsadvanced/slot-complete-event/): Respond in your code when Ezoic finishes loading an ad slot.
+- [Scroll Rail Ads](https://docs.ezoic.com/docs/ezoicadsadvanced/scroll-rail/): Add a scroll rail of ads to your site's sidebar with ezstandalone.showScrollRail. Container requirements, ad counts, multiple rails, and single-page app behavior.
 - [Rewarded Ads](https://docs.ezoic.com/docs/ezoicadsadvanced/rewarded/): Implement Ezoic rewarded ads to monetize user engagement. Complete integration guide with JavaScript examples, content locker setup, and analytics tracking for maximum revenue.
 - [Next.js](https://docs.ezoic.com/docs/ezoicadsadvanced/nextjs/): Implement Ezoic on your site using Next.js. Full guide with examples.
 - [Framework SDKs](https://docs.ezoic.com/docs/ezoicadsadvanced/framework-sdks/): Official open-source Ezoic SDKs for Angular, React, and Vue web apps — display ads, consent, SPA routing, rewarded ads, and video — plus live example implementations.
@@ -48,10 +50,10 @@
 - [API Reference](https://docs.ezoic.com/docs/webgames/api-reference/): Complete EzGameSDK API reference: init, commercialBreak, rewardedBreak, showBanner, hideBanner, gameplayStart, gameplayStop, hasAdBlock, error codes, and cooldown behavior.
 
 ## Analytics MCP
-- [Cursor](https://docs.ezoic.com/docs/analytics-mcp/cursor/): Step-by-step guide to connecting Cursor to your Ezoic analytics data with the Ezoic Analytics MCP server and OAuth.
 - [ChatGPT](https://docs.ezoic.com/docs/analytics-mcp/chatgpt/): Install the official Ezoic Analytics plugin from the ChatGPT plugin directory and sign in with your Ezoic account via OAuth.
-- [Claude](https://docs.ezoic.com/docs/analytics-mcp/claude/): Connect Claude.ai or Claude Desktop to your Ezoic analytics with the Analytics MCP server using a custom connector and OAuth.
+- [Claude](https://docs.ezoic.com/docs/analytics-mcp/claude/): Install the official Ezoic Analytics connector from the Claude connectors directory and sign in with your Ezoic account via OAuth.
 - [Claude Code](https://docs.ezoic.com/docs/analytics-mcp/claude-code/): Install the Ezoic Analytics MCP server in Claude Code and sign in with your Ezoic account via OAuth.
+- [Cursor](https://docs.ezoic.com/docs/analytics-mcp/cursor/): Step-by-step guide to connecting Cursor to your Ezoic analytics data with the Ezoic Analytics MCP server and OAuth.
 - [VS Code](https://docs.ezoic.com/docs/analytics-mcp/vscode/): Add the Ezoic Analytics MCP server to VS Code and sign in with your Ezoic account via OAuth.
 - [Codex](https://docs.ezoic.com/docs/analytics-mcp/codex/): Configure the Ezoic Analytics MCP server in Codex CLI and sign in with your Ezoic account via OAuth.
 
@@ -62,7 +64,9 @@
 - [Getting Started](https://docs.ezoic.com/docs/subscriptions/getting-started/): Learn the setup path for Ezoic Subscriptions, including payments, products, prices, onsite script setup, SEO markup, and subscriber checkout.
 - [Payment Setup](https://docs.ezoic.com/docs/subscriptions/payment-setup/): Choose how Ezoic Subscriptions collects payments, including Ezoic-managed payments and Stripe Connect.
 - [Products, Prices, and Paid Access](https://docs.ezoic.com/docs/subscriptions/products/): Create Ezoic Subscriptions products with prices and product handles to sell subscriptions and one-time purchases on your site.
+- [Promo Codes](https://docs.ezoic.com/docs/subscriptions/promo-codes/): Create promo codes to offer percentage or fixed-amount discounts at Ezoic Subscriptions checkout. Configure duration, product scope, and redemption limits from the dashboard.
 - [Onsite Script Integration](https://docs.ezoic.com/docs/subscriptions/site-integration/): Install the Ezoic Subscriptions onsite script and launch paid access with product handles.
+- [Testing with Test Mode](https://docs.ezoic.com/docs/subscriptions/testing-sandbox/): Use test mode to walk the full subscriber checkout with Stripe test cards — no real charges and no impact on your live revenue, subscribers, or analytics.
 - [Publisher-Managed Access API](https://docs.ezoic.com/docs/subscriptions/publisher-managed-access/): Use Ezoic Subscriptions product handles to control paid content, member-only features, and subscriber experiences on your site.
 - [Visitor Authentication](https://docs.ezoic.com/docs/subscriptions/visitor-authentication/): Configure how visitors sign in to Ezoic Subscriptions: use built-in Ezoic visitor accounts with no setup, or bring your own login through the ezsubscriptions AuthAdapter.
 - [Paywall Appearance and Styling](https://docs.ezoic.com/docs/subscriptions/paywall-appearance/): Control how the Ezoic Subscriptions paywall and checkout look — pick a template, color mode, and accent, or match your brand exactly with CSS variables.
@@ -71,7 +75,12 @@
 - [Subscriber Experience](https://docs.ezoic.com/docs/subscriptions/subscriber-experience/): Understand what subscribers see when they buy, log in, manage subscriptions, update cards, and view receipts with Ezoic Subscriptions.
 - [JavaScript API Reference](https://docs.ezoic.com/docs/subscriptions/api-reference/): Reference the ezsubscriptions JavaScript API methods, options, callbacks, and return values for onsite Ezoic Subscriptions integrations.
 - [Server-to-Server REST API](https://docs.ezoic.com/docs/subscriptions/rest-api/): Verify reader access and read subscriptions from your own server with the Ezoic Subscriptions REST API, authenticated through the Ezoic API gateway.
-- [Troubleshooting](https://docs.ezoic.com/docs/subscriptions/troubleshooting/): Troubleshoot Ezoic Subscriptions script loading, paywall display, subscriber access, SEO markup, donations, checkout, and portal issues.
+- [Troubleshooting](https://docs.ezoic.com/docs/subscriptions/troubleshooting/): Troubleshoot Ezoic Subscriptions payment setup, script loading, paywall display, checkout, subscriber access, ad removal, SEO markup, donations, and the subscriber portal.
+
+## API
+- [Big Data Analytics](https://docs.ezoic.com/docs/api/bdaservices/): Pull predefined and custom reports and their data from your Ezoic account with the Big Data Analytics REST API.
+- [CDN](https://docs.ezoic.com/docs/api/cdn/): Clear and purge cached content on the Ezoic CDN with the CDN REST API.
+- [Subscriptions](https://docs.ezoic.com/docs/api/subscriptions/): The Subscriptions server-to-server REST API is documented in the Ezoic Subscriptions section.
 
 ## Legacy Features
 - [Hybrid Option](https://docs.ezoic.com/docs/ezoic-legacy-features/hybrid/): For more complex sites that have a mix of static and dynamic content, and want to make use of all of Ezoic's features, we have our Hybrid Integration. Hybrid Integration Hybrid Integration is when a site integrates through nameservers or …

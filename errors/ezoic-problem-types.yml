@@ -1,42 +1,141 @@
-generated: '2026-07-19'
+generated: '2026-08-13'
 method: derived
-source: openapi/ezoic-subscriptions-openapi.yml
+source: >-
+  openapi/ezoic-access-api-openapi.yml , openapi/ezoic-purchases-api-openapi.yml ,
+  openapi/ezoic-products-api-openapi.yml , openapi/ezoic-cdn-api-openapi.yml ,
+  openapi/ezoic-big-data-analytics-api-openapi.yml ,
+  https://docs.ezoic.com/docs/subscriptions/rest-api/ , https://docs.ezoic.com/docs/api/cdn/ ,
+  live probe of https://api-gateway.ezoic.com
 format: custom
-envelope:
+envelopes:
+- services: [Subscriptions]
   success_field: success
   message_field: message
+  example: '{ "success": false, "message": "A reader email or token is required" }'
+- services: [CDN]
+  success_field: Success
+  message_field: Error
+  example: '{"Success":false,"Error":"..."}'
+  note: The same envelope is returned on success, with Error as an empty string.
+- services: [Big Data Analytics]
+  success_field: null
+  message_field: null
   note: >-
-    Ezoic Subscriptions REST API returns a custom JSON error envelope
-    ({ "success": false, "message": "..." }), not RFC 9457 application/problem+json.
+    No error contract is published. The BDA documentation shows only successful example
+    payloads, so a caller cannot tell in advance what a failure looks like. This is the
+    single largest error-handling gap in the Ezoic surface.
+note: >-
+  No Ezoic API uses RFC 9457 application/problem+json. There is no shared error envelope
+  across the three gateway services, and no error code vocabulary — errors are free-text
+  strings, so a client cannot branch on anything but the HTTP status.
 problems:
-  - status: 400
-    title: Bad Request
-    meaning: Missing required parameters or duplicate reader identity headers.
-    remediation: >-
-      Supply developerKey and domain, exactly one of product/item where required, and
-      exactly one reader identity header.
-    source_operations:
-      - openapi/ezoic-subscriptions-openapi.yml#checkAccess
-      - openapi/ezoic-subscriptions-openapi.yml#listProducts
-      - openapi/ezoic-subscriptions-openapi.yml#listPurchases
-  - status: 403
-    title: Forbidden
-    meaning: Subscriptions disabled for the domain, or an invalid reader token.
-    remediation: Enable Ezoic Subscriptions for the domain and verify the reader session JWT.
-    source_operations:
-      - openapi/ezoic-subscriptions-openapi.yml#checkAccess
-      - openapi/ezoic-subscriptions-openapi.yml#listPurchases
+- status: 503
+  scope: gateway
+  title: Developer key is empty
+  meaning: >-
+    The API gateway rejected the request before routing because no developerKey query
+    parameter was supplied.
+  remediation: Supply developerKey on every request.
+  note: >-
+    Observed live, verbatim, on every unauthenticated path of
+    https://api-gateway.ezoic.com — including /.well-known/*. This is a 503 where a 401 is
+    the semantically correct status, and agents must not read it as a service outage.
+  observed:
+    url: https://api-gateway.ezoic.com/subscriptions/v1/access
+    http_status: 503
+    body: Developer key is empty.
+    checked: '2026-08-13'
+- status: 400
+  scope: Subscriptions
+  title: Bad Request
+  meaning: >-
+    Missing product and item on /access, or a missing or duplicated reader identity header.
+  remediation: >-
+    Supply developerKey and domain, exactly one of product or item on /access, and exactly
+    one reader identity header (X-Ezoic-Reader-Email OR X-Ezoic-Reader-Token). A request
+    with neither, or with both, is rejected.
+  source_operations: [checkAccess, listProducts, listPurchases]
+- status: 403
+  scope: Subscriptions
+  title: Forbidden
+  meaning: >-
+    Subscriptions are not enabled for the domain, or a relayed reader token is invalid or
+    was minted for a different domain.
+  remediation: >-
+    Enable Ezoic Subscriptions for the domain, and read the reader token fresh per request
+    with getSessionToken() — tokens are short-lived and scoped to the current domain, and
+    the API validates them against the requested domain so one site's token cannot be
+    replayed against another.
+  source_operations: [checkAccess, listPurchases]
+- status: null
+  scope: CDN
+  title: Service error
+  meaning: The Error field carries a free-text description; Success is false.
+  remediation: Read the Error string. No status-code mapping or error-code vocabulary is published.
+  source_operations: [cdnPing, clearCache, bulkClearCache, clearBySurrogateKeys, purgeCache]
+  note: >-
+    The CDN docs publish the envelope but no failure statuses and no example failure
+    payload, so only the shape is known — not the codes.
+- status: null
+  scope: Big Data Analytics
+  title: Undocumented
+  meaning: No failure response is published for any BDA operation.
+  remediation: >-
+    Treat any non-2xx or any absence of the expected data array as a failure and log the
+    raw body. Two failure MODES are named in the Analytics MCP troubleshooting notes and
+    are presumed to surface here too: an unavailable dimension/metric column (the message
+    lists the valid options), and a date range outside the window with data.
+  source_operations: [getReports, getReport, getData, getCustomData, getColumns, getCustomReports, createCustomReport, getSegments, createSegment, getMultiFilters, getMultiFilterTypes]
 access_decision_reason_codes:
   note: >-
-    The /access decision carries a reasonCode enumerating why access was allowed or
-    denied (application-level, not an HTTP error).
-  codes:
-    - allowed
-    - customer_required
-    - unknown_product
-    - no_entitlement
-    - not_started
-    - expired
-    - revoked
-    - suspended
-    - pending
+    The Subscriptions /access decision carries a decision plus a reasonCode explaining it.
+    These are application-level outcomes, not HTTP errors — an unknown reader is a normal
+    result, not a failure.
+  grant_access_only_when: decision == "allowed"
+  decisions:
+  - code: allowed
+    meaning: The reader has active access.
+  - code: denied
+    meaning: The reader is known but has no entitlement for this product or item.
+  - code: login_required
+    meaning: No reader could be resolved from the identity sent — treat as signed out.
+  - code: expired
+    meaning: The reader had access, but it has ended.
+  - code: revoked
+    meaning: Access was removed.
+  - code: unknown_product
+    meaning: The product handle is not recognized for this domain — usually a typo or an inactive product.
+  reason_codes:
+  - allowed
+  - customer_required
+  - unknown_product
+  - no_entitlement
+  - not_started
+  - expired
+  - revoked
+  - suspended
+  - pending
+  unknown_reader:
+    note: >-
+      An email that has never subscribed, or a lapsed session token, resolves to a reader
+      holding nothing. /access returns decision login_required with reasonCode
+      customer_required; /products and /purchases return an empty array. This is a normal
+      outcome — prompt the reader to sign in or subscribe.
+mcp_errors:
+  note: >-
+    The Analytics MCP publishes three named failure modes in its troubleshooting section,
+    which are the closest thing Ezoic ships to an analytics error vocabulary.
+  source: https://docs.ezoic.com/docs/analytics-mcp/
+  modes:
+  - message: Domain does not belong to this publisher
+    meaning: The requested domain is outside the connected login's access.
+    remediation: Ask the assistant which domains it can see (the available_domains tool).
+  - message: A dimension or metric is rejected
+    meaning: Not every column is available on every account.
+    remediation: The error message lists the valid options.
+  - message: A date range returns no data
+    meaning: The requested window falls outside the range with data.
+    remediation: The MCP reports the earliest and latest available dates for the requested domains.
+  - message: Connection fails at login
+    meaning: Credentials or permissions problem.
+    remediation: Confirm sign-in at login.ezoic.com; publisher users also need the Analytics permission.

@@ -1,40 +1,129 @@
-generated: '2026-07-19'
+generated: '2026-08-13'
 method: searched
-source: https://docs.ezoic.com/docs/subscriptions/rest-api/
-docs: https://docs.ezoic.com/docs/subscriptions/rest-api/
+source: >-
+  https://docs.ezoic.com/docs/api/ , https://docs.ezoic.com/docs/subscriptions/rest-api/ ,
+  https://docs.ezoic.com/docs/analytics-mcp/ , and live probes of
+  https://token.ezoic.com/.well-known/oauth-authorization-server and
+  https://analytics-mcp.ezoic.com/.well-known/oauth-protected-resource
+docs: https://docs.ezoic.com/docs/api/
 summary:
-  types:
-  - apiKey
-  api_key_in:
-  - query
-  - header
+  types: [apiKey, oauth2]
+  api_key_in: [query, header]
+  note: >-
+    Ezoic runs two authentication regimes with nothing in common. The REST gateway uses one
+    long-lived API key in the QUERY STRING for all three services. The agent surface uses a
+    modern OAuth 2.0 authorization server with PKCE, DPoP, dynamic client registration and
+    RFC 9728 resource metadata. The newer surface is materially better secured than the
+    older one.
+regimes:
+- name: API gateway (REST)
+  applies_to: [Big Data Analytics, CDN, Subscriptions]
+  host: https://api-gateway.ezoic.com
+  enablement: >-
+    Each service is off until enabled under Settings -> API Access in the Ezoic dashboard.
+    The key is shared across every enabled service and is rotatable from that page.
+  authorization: >-
+    The gateway authenticates the key, confirms it is enabled for the requested service,
+    and confirms any `domain` passed belongs to the account, before the request reaches the
+    service. A key can only ever act on its own domains.
+  unauthenticated_response: 503 "Developer key is empty."
+- name: Agent surface (OAuth)
+  applies_to: [Analytics MCP]
+  authorization_server: https://token.ezoic.com
+  enablement: The connecting Ezoic role must include the Analytics permission.
+  see_also: scopes/ezoic-scopes.yml
 schemes:
 - name: developerKey
   type: apiKey
   in: query
   parameter: developerKey
-  description: Your Ezoic API (developer) key, passed as a query parameter alongside the account-owned domain.
+  regime: API gateway (REST)
+  description: >-
+    Your Ezoic API key, copied from Settings -> API Access. One key for every enabled
+    gateway service; regenerate it from the same page.
   sources:
-  - openapi/ezoic-subscriptions-openapi.yml
+  - https://docs.ezoic.com/docs/api/
+  - openapi/ezoic-big-data-analytics-api-openapi.yml
+  - openapi/ezoic-cdn-api-openapi.yml
+  - openapi/ezoic-access-api-openapi.yml
+  risk: >-
+    A long-lived bearer credential in the query string is logged by proxies, CDNs, browser
+    history and server access logs by default. Ezoic keeps reader identity out of the URL
+    for exactly this reason, but places the account credential there.
+- name: domain
+  type: scoping-parameter
+  in: query
+  parameter: domain
+  regime: API gateway (REST)
+  description: >-
+    The domain being queried. Not a credential, but authorization-bearing — the gateway
+    rejects any domain not on the key's account.
+  sources: [https://docs.ezoic.com/docs/subscriptions/rest-api/]
 - name: X-Ezoic-Reader-Email
   type: apiKey
   in: header
   parameter: X-Ezoic-Reader-Email
+  regime: API gateway (REST)
+  applies_to: [Subscriptions]
   description: >-
-    Reader identity — the reader's email address. Exactly one reader identity header
-    (email OR token) must be supplied; reader identity must never be in the query string.
-  sources:
-  - https://docs.ezoic.com/docs/subscriptions/rest-api/
+    Reader identity — the reader's email address. The common case, including sites that
+    bring their own login. Supply exactly one reader identity header; neither or both is
+    rejected.
+  sources: [https://docs.ezoic.com/docs/subscriptions/rest-api/]
 - name: X-Ezoic-Reader-Token
   type: apiKey
   in: header
   parameter: X-Ezoic-Reader-Token
+  regime: API gateway (REST)
+  applies_to: [Subscriptions]
   description: >-
-    Reader identity — the reader's Ezoic Subscriptions session JWT (visitor-account sites).
-    Alternative to the email header; supply exactly one.
+    Reader identity — the reader's Ezoic Subscriptions session JWT, for Ezoic
+    visitor-account sites where the server never sees the reader's email. Read it in the
+    browser with getSessionToken() and relay it. Short-lived and scoped to the current
+    domain; the API validates it against the requested domain, so a token from one site
+    cannot be replayed against another. Read per request rather than storing it —
+    getSessionToken() returns null for a signed-out visitor.
+  sources: [https://docs.ezoic.com/docs/subscriptions/rest-api/]
+- name: Ezoic OAuth 2.0
+  type: oauth2
+  regime: Agent surface (OAuth)
+  applies_to: [Analytics MCP]
+  issuer: https://token.ezoic.com
+  metadata: https://token.ezoic.com/.well-known/oauth-authorization-server
+  flows:
+    authorization_code:
+      authorization_url: https://token.ezoic.com/authorize
+      token_url: https://token.ezoic.com/token
+      pkce: required (S256 only)
+      scopes: {}
+    client_credentials:
+      token_url: https://token.ezoic.com/token
+    device_code:
+      device_authorization_url: https://token.ezoic.com/device_authorization
+      token_url: https://token.ezoic.com/token
+  bearer_methods_supported: [header]
+  dpop: supported (ES256)
+  dynamic_client_registration: https://token.ezoic.com/register
+  revocation: https://token.ezoic.com/token/revoke
+  jwks_uri: https://token.ezoic.com/.well-known/jwks.json
+  token_endpoint_auth_methods: [none, private_key_jwt]
+  description: >-
+    The assistant redirects the user to Ezoic login, the user authorizes, and the assistant
+    receives a scoped access token. Read-only — no MCP tool can modify, create or delete
+    anything on the account.
   sources:
-  - https://docs.ezoic.com/docs/subscriptions/rest-api/
-oauth:
-  note: >-
-    The Ezoic Analytics MCP server (analytics-mcp.ezoic.com/mcp) authenticates separately
-    via OAuth 2.0 with a scoped access token — see mcp/ezoic-mcp.yml.
+  - https://docs.ezoic.com/docs/analytics-mcp/
+  - https://token.ezoic.com/.well-known/oauth-authorization-server
+- name: anonymous
+  type: none
+  regime: Agent surface
+  applies_to: [Setup Assistant MCP]
+  endpoint: https://setup-agent.ezoic.com/mcp
+  description: >-
+    No account and no key. Verified by a successful unauthenticated initialize +
+    tools/list on 2026-08-13.
+  sources: [https://github.com/ezoic/ezoic-setup-mcp]
+mfa_or_signing:
+  request_signing: false
+  mutual_tls: false
+  note: No request signing or mTLS is published for the REST gateway.

@@ -1,0 +1,182 @@
+openapi: 3.1.0
+info:
+  title: Ezoic CDN API
+  version: v1
+  description: >-
+    REST API for clearing and purging cached content on the Ezoic CDN. Endpoints live
+    under /cdnservices/ on the Ezoic API gateway and are authenticated with the shared
+    Ezoic API-gateway developerKey. Faithfully modeled from the public documentation at
+    https://docs.ezoic.com/docs/api/cdn/ — every path, field, requirement and response
+    shape below is stated on that page.
+  x-apievangelist-method: generated
+  x-apievangelist-source: https://docs.ezoic.com/docs/api/cdn/
+  contact:
+    name: Ezoic Support
+    url: https://support.ezoic.com/
+servers:
+- url: https://api-gateway.ezoic.com
+  description: Ezoic API gateway (production)
+security:
+- developerKey: []
+tags:
+- name: CDN
+  description: Cache clearing and purging on the Ezoic CDN.
+paths:
+  /cdnservices/ping/:
+    post:
+      operationId: cdnPing
+      summary: Ping the CDN service
+      description: Verify the CDN service is responding.
+      tags:
+      - CDN
+      parameters:
+      - $ref: '#/components/parameters/developerKey'
+      responses:
+        '200':
+          $ref: '#/components/responses/CdnResult'
+  /cdnservices/clearcache:
+    post:
+      operationId: clearCache
+      summary: Clear the cache for a single URL
+      description: Clear the cache for a single URL in all regions.
+      tags:
+      - CDN
+      parameters:
+      - $ref: '#/components/parameters/developerKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - url
+              properties:
+                url:
+                  type: string
+                  description: The URL whose cache to clear.
+                  example: https://www.example.com/
+      responses:
+        '200':
+          $ref: '#/components/responses/CdnResult'
+  /cdnservices/bulkclearcache:
+    post:
+      operationId: bulkClearCache
+      summary: Clear the cache for many URLs
+      description: Clear the cache for an array of URLs, in batches of 100.
+      tags:
+      - CDN
+      parameters:
+      - $ref: '#/components/parameters/developerKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - urls
+              properties:
+                urls:
+                  type: array
+                  description: The URLs whose cache to clear. Processed in batches of 100.
+                  items:
+                    type: string
+                  example:
+                  - https://www.example.com/
+                  - https://www.example.com/page1
+      responses:
+        '200':
+          $ref: '#/components/responses/CdnResult'
+  /cdnservices/clearbysurrogatekeys:
+    post:
+      operationId: clearBySurrogateKeys
+      summary: Clear the cache by surrogate key
+      description: Clear the cache for a comma-separated list of surrogate keys on a domain.
+      tags:
+      - CDN
+      parameters:
+      - $ref: '#/components/parameters/developerKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - keys
+              - domain
+              properties:
+                keys:
+                  type: string
+                  description: Comma-separated surrogate keys.
+                  example: key1,key2,keyC
+                domain:
+                  $ref: '#/components/schemas/BareDomain'
+      responses:
+        '200':
+          $ref: '#/components/responses/CdnResult'
+  /cdnservices/purgecache:
+    post:
+      operationId: purgeCache
+      summary: Purge the entire cache for a domain
+      description: Purge the entire Ezoic CDN cache for a domain.
+      tags:
+      - CDN
+      parameters:
+      - $ref: '#/components/parameters/developerKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - domain
+              properties:
+                domain:
+                  $ref: '#/components/schemas/BareDomain'
+      responses:
+        '200':
+          $ref: '#/components/responses/CdnResult'
+components:
+  parameters:
+    developerKey:
+      name: developerKey
+      in: query
+      required: true
+      description: >-
+        Your Ezoic API key, from Settings -> API Access in the Ezoic dashboard. Shared
+        across every Ezoic API-gateway service you have enabled.
+      schema:
+        type: string
+  responses:
+    CdnResult:
+      description: Standard CDN service result envelope.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CdnResult'
+  schemas:
+    BareDomain:
+      type: string
+      description: >-
+        The bare domain, without a subdomain (such as www.), a scheme (such as https://),
+        or a path (such as /).
+      example: example.com
+    CdnResult:
+      type: object
+      description: Every CDN endpoint returns the same response shape.
+      properties:
+        Success:
+          type: boolean
+          example: true
+        Error:
+          type: string
+          example: ''
+  securitySchemes:
+    developerKey:
+      type: apiKey
+      in: query
+      name: developerKey
+      description: Your Ezoic API-gateway developer key, passed as a query parameter.

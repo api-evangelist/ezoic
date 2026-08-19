@@ -1,0 +1,241 @@
+{
+  "item": [
+    {
+      "id": "970aa88a-5186-4aae-a71f-301acd6dd902",
+      "name": "Products",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "6083944d-435c-4304-96af-118348d90254",
+          "name": "List product handles for the domain",
+          "request": {
+            "name": "List product handles for the domain",
+            "description": {
+              "content": "Returns the list of Ezoic Subscriptions product handles configured for the domain.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "products"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "developerKey",
+                  "value": "<string>",
+                  "description": "(Required) Your Ezoic API key."
+                },
+                {
+                  "disabled": false,
+                  "key": "domain",
+                  "value": "<string>",
+                  "description": "(Required) The domain being queried (must belong to your account)."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "666d8e2d-15e7-465b-b4bd-c4fe98b14a56",
+              "name": "Product handles",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "developerKey",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "domain",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "developerKey",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"data\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "54ed5e5f-c8e2-43bc-99e7-c76444f651a9",
+              "name": "Missing required parameters or duplicate identity headers.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "developerKey",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "domain",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "developerKey",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "283ce021-47b3-43e9-bce9-ef10f017409b",
+              "name": "Subscriptions disabled for domain or invalid reader token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "developerKey",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "domain",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "developerKey",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-gateway.ezoic.com/subscriptions/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "developerKey"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "query"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "00e796c0-5977-4a63-a66d-f028278e9053",
+    "name": "Ezoic Subscriptions Server-to-Server REST Access Products API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Server-to-server REST API for Ezoic Subscriptions. Lets a publisher verify a reader's paid access and read a reader's subscriptions/purchases from their own backend, authenticated through the Ezoic API gateway. Faithfully modeled from the public documentation at https://docs.ezoic.com/docs/subscriptions/rest-api/.\n\nContact Support:\n Name: Ezoic Support",
+      "type": "text/plain"
+    }
+  }
+}

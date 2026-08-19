@@ -1,19 +1,144 @@
-generated: '2026-07-19'
-method: searched
-source: live probes of /.well-known/* on Ezoic hosts
+generated: '2026-08-13'
+method: probed
+source: live probes of /.well-known/* on every Ezoic host named in apis.yml and in the OpenAPI servers[]
 note: >-
-  No /.well-known/ discovery documents were served (all probed paths returned 404 or
-  were unreachable). Recorded for auditability; no WellKnown/SecurityTxt pointer is
-  wired because nothing was found.
+  Round 2 found real documents that round 1 missed, because they are not on the marketing
+  or docs host: Ezoic serves RFC 9728 OAuth protected-resource metadata from its MCP host
+  (analytics-mcp.ezoic.com) and a full RFC 8414 authorization-server metadata document
+  plus a JWKS from its dedicated token host (token.ezoic.com). Those are real, parsing
+  JSON documents, so a WellKnown pointer is wired. Everything on www.ezoic.com and
+  docs.ezoic.com still 404s — including security.txt, so no SecurityTxt pointer is wired
+  even though Ezoic does run a disclosure program at https://www.ezoic.com/security.
 hosts:
-  - host: https://www.ezoic.com
-    documents:
-      - { path: /.well-known/security.txt, status: 404 }
-      - { path: /.well-known/openid-configuration, status: 404 }
-      - { path: /.well-known/oauth-authorization-server, status: 404 }
-      - { path: /.well-known/api-catalog, status: 404 }
-      - { path: /.well-known/ai-plugin.json, status: 404 }
-  - host: https://docs.ezoic.com
-    documents:
-      - { path: /.well-known/security.txt, status: 404 }
-      - { path: /llms.txt, status: 200, file: ../llms/ezoic-llms.txt }
+- host: https://token.ezoic.com
+  role: OAuth 2.0 authorization server for Ezoic MCP / agent access
+  documents:
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    content_type: application/json
+    file: ezoic-oauth-authorization-server.json
+    spec: RFC 8414
+  - path: /.well-known/jwks.json
+    status: 200
+    content_type: application/json
+    file: ezoic-jwks.json
+    spec: RFC 7517
+  - path: /.well-known/openid-configuration
+    status: 404
+- host: https://analytics-mcp.ezoic.com
+  role: Ezoic Analytics MCP server (OAuth-protected resource)
+  documents:
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    content_type: application/json
+    file: ezoic-oauth-protected-resource.json
+    spec: RFC 9728
+    note: >-
+      Also advertised at runtime — an unauthenticated POST to /mcp returns 401 with
+      WWW-Authenticate Bearer resource_metadata="https://analytics-mcp.ezoic.com/.well-known/oauth-protected-resource".
+  - path: /.well-known/oauth-protected-resource/mcp
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+- host: https://setup-agent.ezoic.com
+  role: Ezoic Setup Assistant MCP server (anonymous, no auth)
+  documents:
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    note: Expected — this server requires no authentication.
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://token.bidsystem.ai
+  role: OAuth 2.0 authorization server for bidsystem.ai (Ezoic's advertiser platform)
+  ownership: >-
+    Different domain, same company — bidsystem.ai's homepage says "bidsystem.ai is Ezoic's
+    performance advertising platform", ezoic.com's "Get Started" CTA links to
+    https://admin.bidsystem.ai/register, and token.ezoic.com advertises the vendor grant
+    urn:bidsystem:params:oauth:grant-type:adcp-client-recovery.
+  documents:
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    content_type: application/json
+    file: ezoic-bidsystem-oauth-authorization-server.json
+    spec: RFC 8414
+    note: Byte-for-byte the same configuration as token.ezoic.com, with the issuer/endpoints swapped.
+- host: https://api.bidsystem.ai
+  role: bidsystem.ai MCP server (OAuth-protected resource)
+  documents:
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    content_type: application/json
+    file: ezoic-bidsystem-oauth-protected-resource.json
+    spec: RFC 9728
+    note: >-
+      Publishes scopes_supported [openid, profile] — the only Ezoic-family resource that
+      names any scope.
+  - path: /.well-known/agent-card.json
+    status: 404
+    note: Proper JSON 404 ({"error":"not_found"}).
+  - path: /.well-known/adcp.json
+    status: 404
+- host: https://www.bidsystem.ai
+  documents:
+  - path: /.well-known/agent-card.json
+    status: 200
+    verdict: REJECTED — not a document
+    note: >-
+      200 but the body is the advertiser console's SPA HTML shell, served for any
+      /.well-known/* path. This is the SPA catch-all false positive; it is NOT an A2A
+      agent card and no AgentCard pointer is wired from it. Recorded so a later round does
+      not re-discover the 200 and credit it.
+- host: https://www.ezoic.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    note: SPA 404 shell, not a document. Disclosure contact is published as prose at https://www.ezoic.com/security (security@ezoic.com).
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /.well-known/adcp.json
+    status: 404
+  - path: /.well-known/mcp.json
+    status: 404
+- host: https://docs.ezoic.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /llms.txt
+    status: 200
+    content_type: text/plain
+    file: ../llms/ezoic-llms.txt
+- host: https://login.ezoic.com
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 404
+    note: Ezoic login is an OAuth 2.0 authorization server (token.ezoic.com), not an OIDC provider — no OIDC discovery document is served.
+- host: https://api-gateway.ezoic.com
+  documents:
+  - path: /.well-known/oauth-authorization-server
+    status: 503
+    note: >-
+      The gateway rejects every unauthenticated path with 503 "Developer key is empty."
+      before routing, so no /.well-known/ path is reachable on the API host. Recorded as
+      unreachable, not as an absence.
+  - path: /.well-known/agent-card.json
+    status: 503

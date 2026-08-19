@@ -1,0 +1,82 @@
+generated: '2026-08-13'
+method: searched
+source: https://docs.ezoic.com/docs/subscriptions/testing-sandbox/
+name: Ezoic Subscriptions Test Mode
+summary: >-
+  Ezoic Subscriptions ships a test mode that walks the full subscriber flow — paywall,
+  checkout, login, access, and the subscriber portal — on the publisher's own live site,
+  paid with Stripe test cards. It is a mode toggle, not a separate host: there is no
+  sandbox base URL and no separate test API key.
+applies_to:
+- Ezoic Subscriptions (onsite JavaScript API)
+- Ezoic Subscriptions Server-to-Server REST API (indirectly — test entitlements are readable via the Access/Products/Purchases endpoints for the test reader)
+not_available_for:
+- Big Data Analytics API
+- CDN API
+- Analytics MCP
+model:
+  type: mode-toggle
+  separate_host: false
+  separate_key: false
+  key_prefixes: none published
+  note: >-
+    Ezoic publishes no test-vs-live key prefix scheme. The same API-gateway developerKey
+    is used, and live/test separation is a dashboard toggle rather than a credential
+    property.
+enabling:
+  prerequisites:
+  - requirement: At least one product
+    detail: A test checkout buys one of your products, so create one on the Products page first.
+    docs: https://docs.ezoic.com/docs/subscriptions/products/
+  - requirement: The onsite script installed and detected
+    detail: Test mode opens on your own site, so the Ezoic Subscriptions script must be present.
+    docs: https://docs.ezoic.com/docs/subscriptions/site-integration/
+  steps:
+  - Open Subscriptions Manager -> Products in the Ezoic dashboard.
+  - Click "Preview in test mode".
+  - Your site opens in a new tab with test mode active, marked by a "Test mode" banner on every page.
+  note: The preview unlocks automatically once the script is detected — there is nothing to enable.
+test_payments:
+  processor: Stripe
+  cards:
+    source: https://docs.stripe.com/testing
+    note: >-
+      Ezoic does not mint its own test card numbers — it directs publishers to Stripe's
+      published test cards. The one example Ezoic gives verbatim is recorded below.
+    published_examples:
+    - number: '4242 4242 4242 4242'
+      expiry: any future date
+      cvc: any
+      postal_code: any
+      source: https://docs.ezoic.com/docs/subscriptions/testing-sandbox/
+  real_charges: false
+  affects_live_revenue: false
+  affects_live_subscribers: false
+  affects_analytics: false
+test_data:
+  visibility:
+    toggle: Live mode | Test mode
+    pages_with_toggle: [Subscriptions, Payments, Access]
+    note: >-
+      Pages outside those three always show live data regardless of the toggle. While Test
+      mode is on, a banner reminds you that you are viewing test data.
+  labelling: Test payments are labeled, and their amounts and fees are excluded from real revenue and payout estimates.
+  retention:
+    subscriptions_auto_cancelled_after_days: 90
+    records_deleted_after_further_days: 30
+    note: Test records are for validation, not long-term reference.
+session:
+  persistence: Test mode stays active while you browse — it does not reset on page reloads.
+  expiry_hours: 12
+  exit: Click "Exit test mode" in the banner at the top of your site.
+flows_exercisable:
+- Open the paywall
+- Check access with hasAccess(...)
+- Complete checkout
+- Sign in / subscriber portal
+time_simulation:
+  supported: false
+  note: No test clocks or time simulation are published; the only time behaviour documented is the 90/30-day test-record lifecycle and the 12-hour preview session.
+fixtures_or_triggers:
+  supported: false
+  note: No fixture, trigger, or event-simulation tooling is published.

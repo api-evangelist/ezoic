@@ -1,40 +1,228 @@
-generated: '2026-07-19'
+generated: '2026-08-13'
 method: derived
-source: openapi/ezoic-subscriptions-openapi.yml, https://docs.ezoic.com/docs/subscriptions/
+source: >-
+  openapi/ezoic-access-api-openapi.yml , openapi/ezoic-products-api-openapi.yml ,
+  openapi/ezoic-purchases-api-openapi.yml ,
+  openapi/ezoic-big-data-analytics-api-openapi.yml , openapi/ezoic-cdn-api-openapi.yml ,
+  https://docs.ezoic.com/docs/api/ , https://docs.ezoic.com/docs/subscriptions/rest-api/
+note: >-
+  Three services, one join. Everything on the Ezoic API gateway hangs off Domain — the
+  publisher site that the developerKey is authorized for. Subscriptions models
+  entitlements per reader; Big Data Analytics models a reporting cube (report definitions,
+  columns, segments, filters) over that same domain; CDN acts on the domain's cached
+  objects. There is no entity shared between Subscriptions and Big Data Analytics other
+  than Domain itself.
+domains:
+- name: Account
+  service: gateway
+- name: Subscriptions
+  service: subscriptions
+- name: Analytics
+  service: bdaservices
+- name: CDN
+  service: cdnservices
 entities:
-  - name: Domain
-    description: A publisher site registered to an Ezoic account; scopes all subscriptions data.
-    key: domain
-  - name: Product
-    description: An Ezoic Subscriptions product (subscription or one-time), addressed by a product handle.
-    key: productKey (handle)
-  - name: Purchase
-    description: A reader's subscription or one-time purchase of a product/item.
-    fields: [productKey, item, status, expiresAt]
-  - name: Reader
-    description: An identified visitor, addressed by email or a session JWT.
-    key: X-Ezoic-Reader-Email | X-Ezoic-Reader-Token
-  - name: AccessDecision
-    description: The computed allow/deny result for a reader against a product or item.
-    fields: [decision, reasonCode]
+- name: Account
+  domain: Account
+  description: >-
+    The Ezoic publisher account. Owns the shared developerKey, the set of enabled API
+    services, and every domain.
+  key: (implicit — resolved from developerKey)
+  fields: [developerKey, enabled_services]
+- name: Domain
+  domain: Account
+  description: >-
+    A publisher site registered to an Ezoic account. Scopes every call: the gateway
+    rejects any domain that does not belong to the key's account. Identified by name in
+    Subscriptions and CDN, and by numeric DomainId in Big Data Analytics.
+  key: domain (name) / DomainId (numeric, BDA only)
+  note: >-
+    Two identifier systems for the same entity. Subscriptions and CDN take the domain
+    NAME as a string (CDN requires it bare — no subdomain, scheme, or path); BDA takes an
+    integer DomainId, and publishes no operation to resolve a name to that integer.
+
+- name: Reader
+  domain: Subscriptions
+  description: An identified visitor of a domain, asserted by email or by a session token.
+  key: X-Ezoic-Reader-Email | X-Ezoic-Reader-Token
+  note: >-
+    Not addressable as a resource — there is no /readers endpoint. A reader exists only as
+    the identity header on a request, and an unresolvable identity is a normal outcome
+    (login_required), not an error.
+- name: Product
+  domain: Subscriptions
+  description: An Ezoic Subscriptions product, addressed by a product handle.
+  key: productKey (handle)
+- name: Item
+  domain: Subscriptions
+  description: >-
+    A one-time per-item purchasable, addressed by an item key the site assigns at
+    checkout. A price set to unlock the current article automatically stores the article's
+    page URL as its item key.
+  key: item
+- name: Purchase
+  domain: Subscriptions
+  description: >-
+    A reader's subscription or one-time purchase. Unlike Product, this includes one-time
+    item purchases and carries status and expiry.
+  key: (composite — reader + productKey|item)
+  fields: [productKey, item, status, expiresAt]
+  note: productKey is omitted for a one-time item purchase, and also omitted if the product was removed. expiresAt is set only for time-limited access; lifetime access omits it.
+- name: AccessDecision
+  domain: Subscriptions
+  description: The computed allow/deny result for a reader against a product or item.
+  fields: [decision, reasonCode]
+  note: Ephemeral — computed per request, never stored or addressable.
+
+- name: Report
+  domain: Analytics
+  description: >-
+    A predefined report that ships with the account, named rather than numbered (for
+    example revenueDaily). Carries a DateBaseSelectId; BASE_NOT_SELECTED means the report
+    has no built-in date range and getdata must be given one.
+  key: reportName
+- name: CustomReport
+  domain: Analytics
+  description: >-
+    A saved report the publisher builds from chosen dimension and metric columns, with an
+    optional default date range and embedded segments.
+  key: customReportId
+  fields: [ReportTitle, ReportDateRange, Charts]
+- name: Chart
+  domain: Analytics
+  description: A custom report's column selection and sort order.
+  fields: [Name, DimensionColumns, MetricColumns, Segments, Order]
+- name: Column
+  domain: Analytics
+  description: >-
+    A dimension (grouping) or metric (measure) available for reporting — for example
+    report_day, visits, pageviews, engaged_time, revenue, epmv, copy_paste_per_pageview,
+    reward_id, reward_revenue.
+  key: Data (column name)
+  fields: [Data, Type]
+  note: Availability is account-dependent — not every column exists on every account.
+- name: ReportRow
+  domain: Analytics
+  description: One row of returned data, grouped by the dimension columns and split by segment.
+  note: Ephemeral. Paginated by StartItem/MaxItems with no total count and no cursor.
+- name: Segment
+  domain: Analytics
+  description: >-
+    A named split of report data, built from multifilters and/or filters. Includes premade
+    segments such as "All Users" (id 1, no filter) and "Desktop Traffic".
+  key: SegmentId
+  fields: [SegmentName, SegmentMultiFilters]
+- name: MultiFilter
+  domain: Analytics
+  description: A preset filter group — country, device, gender, site.
+  key: MultiFilterId
+  fields: [FilterName, MultiFilterId, MultiFilterTypeId]
+- name: MultiFilterType
+  domain: Analytics
+  description: >-
+    The option set behind a multifilter. Type 1 maps to the Country filter, whose option
+    keys are two-character country codes.
+  key: MultiFilterTypeId
+- name: Filter
+  domain: Analytics
+  description: A row filter applied to a column with an operation.
+  fields: [Type, FilterKey, OperationId, FilterValue]
+
+- name: CachedObject
+  domain: CDN
+  description: >-
+    A cached response on the Ezoic CDN. Not readable — addressable only for invalidation,
+    by URL, by surrogate key, or wholesale by domain.
+  key: url | surrogate key
+- name: SurrogateKey
+  domain: CDN
+  description: A cache tag attached to CDN objects, cleared as a comma-separated list scoped to a domain.
+  key: key
+
 relationships:
-  - from: Product
-    to: Domain
-    type: belongs_to
-    via: domain
-  - from: Purchase
-    to: Product
-    type: belongs_to
-    via: productKey
-  - from: Purchase
-    to: Reader
-    type: belongs_to
-    via: reader identity
-  - from: AccessDecision
-    to: Reader
-    type: belongs_to
-    via: reader identity
-  - from: AccessDecision
-    to: Product
-    type: references
-    via: product|item
+- from: Domain
+  to: Account
+  type: belongs_to
+  via: developerKey authorization
+- from: Product
+  to: Domain
+  type: belongs_to
+  via: domain
+- from: Item
+  to: Domain
+  type: belongs_to
+  via: domain
+- from: Purchase
+  to: Product
+  type: belongs_to
+  via: productKey
+- from: Purchase
+  to: Item
+  type: belongs_to
+  via: item
+- from: Purchase
+  to: Reader
+  type: belongs_to
+  via: reader identity header
+- from: AccessDecision
+  to: Reader
+  type: belongs_to
+  via: reader identity header
+- from: AccessDecision
+  to: Product
+  type: references
+  via: product | item
+- from: CustomReport
+  to: Chart
+  type: has_many
+  via: Charts
+- from: Chart
+  to: Column
+  type: has_many
+  via: DimensionColumns + MetricColumns
+- from: Chart
+  to: Segment
+  type: has_many
+  via: Segments
+- from: ReportRow
+  to: Report
+  type: belongs_to
+  via: reportName
+- from: ReportRow
+  to: CustomReport
+  type: belongs_to
+  via: customReportId
+- from: ReportRow
+  to: Segment
+  type: belongs_to
+  via: SegmentIds
+- from: ReportRow
+  to: Domain
+  type: belongs_to
+  via: DomainId
+- from: Segment
+  to: MultiFilter
+  type: has_many
+  via: SegmentMultiFilters keyed by MultiFilterId
+- from: MultiFilter
+  to: MultiFilterType
+  type: belongs_to
+  via: MultiFilterTypeId
+- from: Filter
+  to: Column
+  type: references
+  via: FilterKey
+- from: CachedObject
+  to: Domain
+  type: belongs_to
+  via: domain
+- from: CachedObject
+  to: SurrogateKey
+  type: has_many
+  via: keys
+id_conventions:
+  note: >-
+    Ezoic publishes no prefixed or typed identifiers. Ids are either human-authored
+    handles (product handle, item key, reportName, surrogate key) or bare integers
+    (DomainId, SegmentId, customReportId, MultiFilterId, MultiFilterTypeId) with nothing in
+    the value indicating its type.

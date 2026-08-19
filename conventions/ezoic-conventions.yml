@@ -1,32 +1,148 @@
-generated: '2026-07-19'
+generated: '2026-08-13'
 method: searched
-source: https://docs.ezoic.com/docs/subscriptions/rest-api/
+source: >-
+  https://docs.ezoic.com/docs/api/ , https://docs.ezoic.com/docs/api/bdaservices/ ,
+  https://docs.ezoic.com/docs/api/cdn/ ,
+  https://docs.ezoic.com/docs/subscriptions/rest-api/
+note: >-
+  Cross-cutting runtime semantics for the Ezoic API gateway. Round 2 widened this from the
+  Subscriptions API alone to all three gateway services, which exposed a real
+  inconsistency: the three services do not share an error envelope or a casing convention,
+  despite sharing one host, one credential and one enablement mechanism.
+gateway:
+  host: https://api-gateway.ezoic.com
+  model: >-
+    One gateway, one credential, per-service enablement. Each service (Big Data Analytics,
+    CDN, Subscriptions) is off until switched on under Settings -> API Access. The gateway
+    authenticates the developerKey, confirms it is enabled for the service, and confirms
+    any `domain` passed belongs to the account, before the request reaches the service.
+  isolation: A key can only ever act on its own domains.
+  unauthenticated_response:
+    status: 503
+    body: Developer key is empty.
+    note: >-
+      The gateway answers 503 — not 401 — for a missing key, on every path including
+      /.well-known/*. Agents should not read a 503 from this host as an outage.
 authentication:
   style: api-key-query
   detail: >-
-    Site credentials passed as query parameters (developerKey = Ezoic API key,
-    domain = the account-owned domain). Reader identity passed as exactly one header:
-    X-Ezoic-Reader-Email or X-Ezoic-Reader-Token (a session JWT). Reader identity must
-    never be sent in the query string.
+    A single Ezoic API key ("developerKey") passed as a query parameter, shared across
+    every enabled gateway service and rotatable from the API Access page. Subscriptions
+    additionally requires `domain`, plus reader identity in exactly one header:
+    X-Ezoic-Reader-Email or X-Ezoic-Reader-Token (the widget session JWT). Reader identity
+    must never be sent in the query string, so emails and tokens stay out of URLs and logs.
   see_also: authentication/ezoic-authentication.yml
+  agent_surface:
+    style: oauth2
+    detail: >-
+      The Analytics MCP server is authenticated differently — OAuth 2.0 against
+      token.ezoic.com with PKCE, DPoP and dynamic client registration. The Setup Assistant
+      MCP server is anonymous.
+    see_also: scopes/ezoic-scopes.yml
 error_envelope:
-  shape: custom
-  success_field: success
-  message_field: message
-  example: '{ "success": false, "message": "Error description" }'
+  consistent_across_services: false
+  shapes:
+  - services: [Subscriptions]
+    shape: custom
+    success_field: success
+    message_field: message
+    example: '{ "success": false, "message": "A reader email or token is required" }'
+    casing: lowerCamel
+  - services: [CDN]
+    shape: custom
+    success_field: Success
+    message_field: Error
+    example: '{"Success":true,"Error":""}'
+    casing: UpperCamel
+    note: >-
+      Every CDN endpoint returns this same shape, including on success — Error is an empty
+      string rather than absent or null.
+  - services: [Big Data Analytics]
+    shape: undocumented
+    note: >-
+      The BDA documentation shows no error response at all — only successful example
+      payloads. An integrator has no published contract for what a failed BDA call returns.
   format: not-rfc9457
   see_also: errors/ezoic-problem-types.yml
-caching:
-  detail: Access responses include Cache-Control:no-store and are not cached.
+casing:
+  consistent_across_services: false
+  detail: >-
+    Subscriptions uses lowerCamel throughout (success, data, productKey, expiresAt,
+    reasonCode). Big Data Analytics uses UpperCamel request fields (StartItem, MaxItems,
+    Platform, DomainId, DateGrouping, SegmentIds, StartDate, EndDate, DimensionColumns)
+    with snake_case column VALUES (report_day, engaged_page_pageviews,
+    copy_paste_per_pageview). CDN uses lowercase request fields (url, urls, keys, domain)
+    with UpperCamel response fields (Success, Error).
+  operation_naming: >-
+    Even within one service the path casing is inconsistent — BDA exposes
+    /bdaservices/getdata/ and /bdaservices/getCustomData/ side by side.
+pagination:
+  consistent_across_services: false
+  by_service:
+  - service: Big Data Analytics
+    supported: true
+    style: offset-limit
+    params: [StartItem, MaxItems]
+    required: MaxItems is required on getdata.
+    all_rows: On getCustomData, omit both StartItem and MaxItems, or set both to 0, to return all rows.
+    response_fields: none documented
+    note: >-
+      No total count, no next cursor, and no page-metadata envelope are documented — the
+      caller increments StartItem and infers the end from a short page.
+  - service: Subscriptions
+    supported: false
+    note: /products and /purchases return full arrays; no pagination documented.
+  - service: CDN
+    supported: false
+    note: >-
+      Not a list surface. bulkclearcache does carry a batching rule — URLs are processed in
+      batches of 100.
+filtering_and_sorting:
+  service: Big Data Analytics
+  filters:
+    row_filters: 'Filters[] entries of {Type: INCLUDE|EXCLUDE, FilterKey, OperationId, FilterValue}'
+    segments: >-
+      SegmentIds[] split a row into segments. When a saved custom report embeds segments,
+      those apply if the request supplies none; otherwise the request's segments win.
+    multifilters: Preset groups (country, device, gender, site) resolved via getmultifilters + getmultifiltertypes.
+  sorting: 'Order: {ColumnNumber, Direction: ASC|DESC} — sorted by column INDEX, not by name.'
+  field_selection: >-
+    DimensionColumns[] and MetricColumns[] are the sparse-fieldset mechanism — the caller
+    names exactly the columns to group by and return, from the list at getcolumns.
+  precision: RevenueDecimalPlaces accepts 2-6 for USD metrics; omit or 0 for the default of 2.
 idempotency:
   supported: false
-  note: No idempotency-key header or contract is documented (read-only GET surface).
-pagination:
-  supported: false
-  note: List endpoints (/products, /purchases) return full arrays; no pagination documented.
+  header: null
+  note: >-
+    No idempotency-key header or contract is documented on any Ezoic API. Most of the
+    surface is read-only GET, but three POSTs are genuinely mutating —
+    createcustomreport, createsegment, and the CDN purge/clear family — and none of them
+    publishes a replay-safety contract. The CDN writes are naturally idempotent by effect
+    (clearing an already-clear cache is a no-op); the two create calls are not.
+  see_also: rate-limits/ezoic-rate-limits.yml
+metadata_and_tracing:
+  request_id: none documented
+  note: No request-id, correlation-id or trace header is documented on any Ezoic API.
+caching:
+  subscriptions: >-
+    Responses are served with Cache-Control:no-store, and Ezoic explicitly instructs
+    callers to call per decision rather than cache, so a new purchase, cancellation or
+    expiry takes effect immediately.
+  cdn: The CDN API is itself a cache-invalidation surface (clear by URL, by surrogate key, or full purge by domain).
 versioning:
-  style: uri-path
+  consistent_across_services: false
+  detail: >-
+    Only Subscriptions is versioned — /subscriptions/v1. Big Data Analytics
+    (/bdaservices/) and CDN (/cdnservices/) carry no version segment at all, so those two
+    services have no published mechanism for a breaking change.
+  style: uri-path (Subscriptions only)
   current: v1
   see_also: lifecycle/ezoic-lifecycle.yml
 rate_limiting:
   documented: false
+  see_also: rate-limits/ezoic-rate-limits.yml
+http_methods:
+  note: >-
+    Method choice is by service convention rather than semantics. The CDN service uses
+    POST for everything including /cdnservices/ping/, a pure liveness read. BDA uses POST
+    for reads that carry a body (getdata, getCustomData).

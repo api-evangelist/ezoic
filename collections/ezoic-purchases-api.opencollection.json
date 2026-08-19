@@ -1,0 +1,61 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Ezoic Subscriptions Server-to-Server REST Access Purchases API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "developerKey",
+      "value": "{{developerKey}}",
+      "placement": "query"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Purchases",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List a reader's purchases",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-gateway.ezoic.com/subscriptions/v1/purchases",
+            "headers": [
+              {
+                "name": "X-Ezoic-Reader-Email",
+                "value": ""
+              },
+              {
+                "name": "X-Ezoic-Reader-Token",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "developerKey",
+                "value": "",
+                "type": "query",
+                "description": "Your Ezoic API key."
+              },
+              {
+                "name": "domain",
+                "value": "",
+                "type": "query",
+                "description": "The domain being queried (must belong to your account)."
+              }
+            ]
+          },
+          "docs": "Returns the identified reader's subscriptions and one-time purchases for the domain. Exactly one reader identity header must be supplied."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

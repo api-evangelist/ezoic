@@ -1,0 +1,79 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Ezoic Big Data Analytics API
+  version: 1.0.0
+extends: openapi/ezoic-big-data-analytics-api-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-enriched: '2026-08-13'
+    x-apievangelist-source: https://docs.ezoic.com/docs/api/bdaservices/
+    x-error-envelope: undocumented
+    x-versioning: none
+    x-pagination: offset-limit (StartItem/MaxItems, no total, no cursor)
+    x-rate-limits: not published
+    x-mcp-server: https://analytics-mcp.ezoic.com/mcp
+    x-mcp-note: >-
+      The Ezoic Analytics MCP server reads the same warehouse as this API. See
+      mcp/ezoic-tool-crosswalk.yml for the tool-to-operation binding.
+- target: $.paths['/bdaservices/getreports/'].get
+  update:
+    x-agentic-access:
+      action-class: connected
+      consequence: read
+- target: $.paths['/bdaservices/getreport/'].get
+  update:
+    x-agentic-access:
+      action-class: connected
+      consequence: read
+- target: $.paths['/bdaservices/getcustomreports/'].get
+  update:
+    x-agentic-access:
+      action-class: connected
+      consequence: read
+- target: $.paths['/bdaservices/getcolumns/'].get
+  update:
+    x-agentic-access:
+      action-class: connected
+      consequence: read
+- target: $.paths['/bdaservices/getsegments/'].get
+  update:
+    x-agentic-access:
+      action-class: connected
+      consequence: read
+- target: $.paths['/bdaservices/getmultifilters/'].get
+  update:
+    x-agentic-access:
+      action-class: connected
+      consequence: read
+- target: $.paths['/bdaservices/getmultifiltertypes/'].get
+  update:
+    x-agentic-access:
+      action-class: connected
+      consequence: read
+- target: $.paths['/bdaservices/getdata/'].post
+  update:
+    x-agentic-access:
+      action-class: connected
+      consequence: read
+    x-note: POST is used for a read because the query is carried in the body. MaxItems is required.
+- target: $.paths['/bdaservices/getCustomData/'].post
+  update:
+    x-agentic-access:
+      action-class: connected
+      consequence: read
+    x-note: POST is used for a read because the query is carried in the body.
+- target: $.paths['/bdaservices/createcustomreport/'].post
+  update:
+    x-agentic-access:
+      action-class: connected
+      consequence: write
+      human-in-the-loop: recommended
+    x-idempotency: none published — a repeated call creates a duplicate saved report.
+- target: $.paths['/bdaservices/createsegment/'].post
+  update:
+    x-agentic-access:
+      action-class: connected
+      consequence: write
+      human-in-the-loop: recommended
+    x-idempotency: none published — a repeated call creates a duplicate segment.

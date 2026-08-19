@@ -1,0 +1,6 @@
+{
+  "resource": "https://api.bidsystem.ai/mcp",
+  "authorization_servers": ["https://token.bidsystem.ai"],
+  "bearer_methods_supported": ["header"],
+  "scopes_supported": ["openid", "profile"]
+}

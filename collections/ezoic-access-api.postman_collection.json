@@ -1,0 +1,331 @@
+{
+  "item": [
+    {
+      "id": "1728d0f3-b6c5-4d1a-a53e-10a25f68ebe0",
+      "name": "Access",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "34e7592b-46d8-445a-aed5-145eac55db53",
+          "name": "Check reader access to a product or item",
+          "request": {
+            "name": "Check reader access to a product or item",
+            "description": {
+              "content": "Returns an allow/deny access decision for the identified reader against a subscription product handle or a one-time item key. Exactly one reader identity header must be supplied.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "access"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "developerKey",
+                  "value": "<string>",
+                  "description": "(Required) Your Ezoic API key."
+                },
+                {
+                  "disabled": false,
+                  "key": "domain",
+                  "value": "<string>",
+                  "description": "(Required) The domain being queried (must belong to your account)."
+                },
+                {
+                  "disabled": false,
+                  "key": "product",
+                  "value": "<string>",
+                  "description": "Product handle to check access for (supply product OR item)."
+                },
+                {
+                  "disabled": false,
+                  "key": "item",
+                  "value": "<string>",
+                  "description": "One-time item key to check access for (supply product OR item)."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Reader's email address. Supply exactly one reader identity header.",
+                "key": "X-Ezoic-Reader-Email",
+                "value": "<email>"
+              },
+              {
+                "disabled": false,
+                "description": "Reader's Ezoic Subscriptions session JWT (visitor-account sites). Supply exactly one reader identity header.",
+                "key": "X-Ezoic-Reader-Token",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e91f3286-caa4-4cfe-9f5e-4d2698dc569f",
+              "name": "Access decision",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "access"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "developerKey",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "domain",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "product",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "item",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "developerKey",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Reader's email address. Supply exactly one reader identity header.",
+                    "key": "X-Ezoic-Reader-Email",
+                    "value": "<email>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Reader's Ezoic Subscriptions session JWT (visitor-account sites). Supply exactly one reader identity header.",
+                    "key": "X-Ezoic-Reader-Token",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Responses are not cached.",
+                  "key": "Cache-Control",
+                  "value": "no-store"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"decision\": \"unknown_product\",\n    \"reasonCode\": \"revoked\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b0942845-bce0-4541-94c9-c1ee6b31fca0",
+              "name": "Missing required parameters or duplicate identity headers.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "access"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "developerKey",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "domain",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "product",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "item",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "developerKey",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Reader's email address. Supply exactly one reader identity header.",
+                    "key": "X-Ezoic-Reader-Email",
+                    "value": "<email>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Reader's Ezoic Subscriptions session JWT (visitor-account sites). Supply exactly one reader identity header.",
+                    "key": "X-Ezoic-Reader-Token",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bed97266-0f6e-4966-9587-298736d0f579",
+              "name": "Subscriptions disabled for domain or invalid reader token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "access"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "developerKey",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "domain",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "product",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "item",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "developerKey",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Reader's email address. Supply exactly one reader identity header.",
+                    "key": "X-Ezoic-Reader-Email",
+                    "value": "<email>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Reader's Ezoic Subscriptions session JWT (visitor-account sites). Supply exactly one reader identity header.",
+                    "key": "X-Ezoic-Reader-Token",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-gateway.ezoic.com/subscriptions/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "developerKey"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "query"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "caef8ce3-4643-42ed-95e5-9d39a19c9b86",
+    "name": "Ezoic Subscriptions Server-to-Server REST Access API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Server-to-server REST API for Ezoic Subscriptions. Lets a publisher verify a reader's paid access and read a reader's subscriptions/purchases from their own backend, authenticated through the Ezoic API gateway. Faithfully modeled from the public documentation at https://docs.ezoic.com/docs/subscriptions/rest-api/.\n\nContact Support:\n Name: Ezoic Support",
+      "type": "text/plain"
+    }
+  }
+}

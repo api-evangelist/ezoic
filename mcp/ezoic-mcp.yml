@@ -1,46 +1,240 @@
-generated: '2026-07-19'
-method: searched
+generated: '2026-08-13'
+method: probed
 status: published
-source: https://docs.ezoic.com/docs/analytics-mcp/
-server:
-  name: ezoic-analytics
+source: >-
+  https://docs.ezoic.com/docs/analytics-mcp/ , https://github.com/ezoic/bda-mcp-public ,
+  https://github.com/ezoic/ezoic-setup-mcp , live tools/list against
+  https://setup-agent.ezoic.com/mcp , and the MCP Registry entry com.ezoic/setup
+note: >-
+  Ezoic ships THREE first-party remote MCP servers, not one. Round 1 recorded only the
+  OAuth-gated Analytics server; round 2 found the anonymous Setup Assistant — listed in
+  the official MCP Registry as com.ezoic/setup, and successfully initialized +
+  introspected unauthenticated, so its tool schemas below are the live server's own — and
+  a third, OAuth-gated server on Ezoic's advertiser platform at api.bidsystem.ai/mcp.
+ownership_note: >-
+  bidsystem.ai is a different domain but the same company: bidsystem.ai's own homepage
+  states "bidsystem.ai is Ezoic's performance advertising platform", ezoic.com's homepage
+  "Get Started" call to action links directly to https://admin.bidsystem.ai/register, and
+  Ezoic's own authorization server at token.ezoic.com advertises the vendor grant type
+  urn:bidsystem:params:oauth:grant-type:adcp-client-recovery. Recorded here under Ezoic on
+  those three independent corroborations.
+
+deployment:
+  mode: remote
+  endpoint: https://analytics-mcp.ezoic.com/mcp
+  auth: oauth
+  verified: probed
+  checked: '2026-08-13'
+  note: >-
+    All three servers are remote Streamable HTTP endpoints an MCP client POSTs to
+    directly. None is a local stdio package — there is nothing to npx or pip install. The
+    primary endpoint recorded here is the Analytics server; the other two remote endpoints
+    (https://setup-agent.ezoic.com/mcp, no auth, and https://api.bidsystem.ai/mcp, OAuth)
+    are in servers[] below.
+  evidence:
+  - url: https://analytics-mcp.ezoic.com/mcp
+    method: POST tools/list
+    http_status: 401
+    detail: >-
+      WWW-Authenticate: Bearer resource_metadata="https://analytics-mcp.ezoic.com/.well-known/oauth-protected-resource"
+      — a live, correctly-advertising OAuth-protected MCP resource. Tool inputSchemas
+      require an authenticated introspection; the tool list below comes from Ezoic's own
+      docs and distribution repo.
+  - url: https://setup-agent.ezoic.com/mcp
+    method: POST initialize + tools/list
+    http_status: 200
+    detail: >-
+      protocolVersion 2025-06-18, serverInfo {name "Ezoic Setup", version "1.0.0"}.
+      Full tool list with inputSchema saved verbatim to mcp/ezoic-setup-mcp-tools.json.
+
+servers:
+- name: ezoic-analytics
+  title: Ezoic Analytics MCP
   description: >-
-    Official hosted Ezoic Analytics MCP server. Read-only access to a publisher's
-    Ezoic analytics (pageview, ad impression, rewarded, and video data). Cannot modify
-    account settings or configuration. Requires the Analytics permission on the Ezoic
-    account.
-  transport: http
+    Official hosted Ezoic Analytics MCP server. Read-only access to a publisher's Ezoic
+    analytics — the same data that powers Big Data Analytics in the Ezoic dashboard.
+    Cannot modify any setting, configuration, or content on the account.
+  transport: streamable-http
   url: https://analytics-mcp.ezoic.com/mcp
+  docs: https://docs.ezoic.com/docs/analytics-mcp/
+  repo: https://github.com/ezoic/bda-mcp-public
+  read_only: true
   auth:
     type: oauth2
+    authorization_server: https://token.ezoic.com
+    protected_resource_metadata: https://analytics-mcp.ezoic.com/.well-known/oauth-protected-resource
     description: >-
-      OAuth 2.0. The user is redirected to Ezoic's login, authorizes the connection,
-      and the assistant receives a scoped access token. Analytics permission required.
-  clients:
-    - name: Claude.ai / Claude Desktop
-      docs: https://docs.ezoic.com/docs/analytics-mcp/claude/
-    - name: Claude Code
-      docs: https://docs.ezoic.com/docs/analytics-mcp/claude-code/
-    - name: ChatGPT
-      docs: https://docs.ezoic.com/docs/analytics-mcp/chatgpt/
-    - name: Cursor
-      docs: https://docs.ezoic.com/docs/analytics-mcp/cursor/
-    - name: VS Code
-      docs: https://docs.ezoic.com/docs/analytics-mcp/vscode/
-    - name: Codex
-      docs: https://docs.ezoic.com/docs/analytics-mcp/codex/
-tools:
+      OAuth 2.0. The user is redirected to Ezoic's login, authorizes the connection, and
+      the assistant receives a scoped access token. The connecting Ezoic role must include
+      the Analytics permission; a publisher user without it cannot connect.
+    see_also: scopes/ezoic-scopes.yml
+  tools:
   - name: available_domains
-    description: List the domains accessible to the user's Ezoic account.
+    title: Available domains
+    description: The Ezoic domains the connected account can report on.
   - name: pageview_data
+    title: Pageview data
     description: >-
-      Traffic metrics — pageviews, visits, EPMV, and engagement time. Filter/sort by
-      date, page, country, device, browser, traffic source.
+      Traffic, engagement, and per-visit revenue metrics — pageviews, visits, EPMV,
+      engaged time and more.
   - name: ad_impression_data
-    description: >-
-      Impressions, clicks, viewability, RPM, and ad revenue breakdowns. Filter/sort by
-      date, page, country, device, browser, ad unit.
+    title: Ad impression data
+    description: Impressions, clicks, viewability, RPM, and ad revenue by ad unit and placement.
   - name: rewarded_ad_data
-    description: Rewarded-ad starts, completions, completion rates, and revenue.
+    title: Rewarded ad data
+    description: Rewarded ad starts, completions, completion rate, and revenue.
   - name: video_data
+    title: Video data
     description: Video plays, completions, watch time, video revenue, and CPM.
+  - name: shared_video_data
+    title: Shared video data
+    description: Performance of the publisher's videos displayed on other sites.
+  tool_schema_status: >-
+    Names and descriptions are Ezoic's own (docs + bda-mcp-public README). Machine tool
+    names are inferred from those titles and are not asserted as the server's wire names;
+    the authoritative inputSchemas need an authenticated tools/list.
+  dimensions:
+    note: Each dataset can be broken down, filtered and sorted by these dimensions.
+    values: [date, page, country, device, browser, traffic source, ad unit]
+  clients:
+  - name: ChatGPT
+    docs: https://docs.ezoic.com/docs/analytics-mcp/chatgpt/
+    note: Official Ezoic Analytics plugin in the ChatGPT plugin directory.
+  - name: Claude.ai / Claude Desktop
+    docs: https://docs.ezoic.com/docs/analytics-mcp/claude/
+    note: Official Ezoic Analytics connector in the Claude connectors directory.
+  - name: Claude Code
+    docs: https://docs.ezoic.com/docs/analytics-mcp/claude-code/
+    install: claude mcp add --transport http ezoic-analytics https://analytics-mcp.ezoic.com/mcp
+  - name: Cursor
+    docs: https://docs.ezoic.com/docs/analytics-mcp/cursor/
+  - name: VS Code
+    docs: https://docs.ezoic.com/docs/analytics-mcp/vscode/
+  - name: Codex
+    docs: https://docs.ezoic.com/docs/analytics-mcp/codex/
+
+- name: ezoic-setup
+  title: Ezoic Setup Assistant
+  description: >-
+    Ezoic ads implementation assistant — answers implementation questions with working,
+    copyable setup code covering the JavaScript integration and ad placeholders, id-less
+    showAds() for dynamic pages, SPA frameworks, the mobile and Web Game SDKs, ads.txt
+    setup, and privacy/consent scripts.
+  transport: streamable-http
+  url: https://setup-agent.ezoic.com/mcp
+  chat_ui: https://setup-agent.ezoic.com
+  repo: https://github.com/ezoic/ezoic-setup-mcp
+  registry:
+    name: com.ezoic/setup
+    url: https://registry.modelcontextprotocol.io
+    status: active
+    published: '2026-07-07'
+    version: 1.0.0
+  read_only: false
+  auth:
+    type: none
+    description: Anonymous — no account, no API key. Ezoic's privacy policy applies.
+  server_info:
+    name: Ezoic Setup
+    version: 1.0.0
+    protocol_version: '2025-06-18'
+    capabilities: { tools: { listChanged: true } }
+  tool_schema_status: live
+  tool_schema_file: ezoic-setup-mcp-tools.json
+  tools:
+  - name: ask
+    title: Ask the agent
+    description: >-
+      Ask the assistant a question. Runs the full pipeline synchronously within
+      deadline_seconds (default 240); otherwise returns {status: pending, job_id} to poll.
+    input_schema:
+      required: []
+      properties: [message, question, thread, thread_id, agent, deadline_seconds, role]
+    annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: true }
+  - name: request_status
+    title: Check async request status
+    description: Check the status of a pending ask() job.
+    input_schema:
+      required: [job_id]
+      properties: [job_id]
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
+  - name: read_response
+    title: Read async response
+    description: Stream a chunk of a pending ask() job's output.
+    input_schema:
+      required: [job_id]
+      properties: [job_id, offset]
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
+  - name: help
+    title: Usage help
+    description: Short orientation text for MCP callers.
+    input_schema:
+      required: []
+      properties: []
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
+  clients:
+  - name: Cursor
+    config: '{"mcpServers": {"ezoic-setup": {"url": "https://setup-agent.ezoic.com/mcp"}}}'
+  - name: Claude Code
+    install: claude mcp add --transport http ezoic-setup https://setup-agent.ezoic.com/mcp
+  - name: Claude.ai / Claude Desktop
+    note: Settings -> Connectors -> Add custom connector, URL https://setup-agent.ezoic.com/mcp
+  - name: VS Code
+    install: 'code --add-mcp ''{"name":"ezoic-setup","type":"http","url":"https://setup-agent.ezoic.com/mcp"}'''
+  - name: Codex CLI
+    config: "[mcp_servers.ezoic-setup]\nurl = \"https://setup-agent.ezoic.com/mcp\""
+
+- name: bidsystem-api
+  title: bidsystem.ai (Ezoic performance advertising) MCP
+  description: >-
+    MCP endpoint on Ezoic's advertiser-side platform, bidsystem.ai — the buy side of the
+    Ezoic publisher network (performance and user-acquisition campaigns across 5,000+
+    premium sites). Undocumented on docs.ezoic.com and absent from the MCP Registry;
+    found by probing the /.well-known/ surface of the host ezoic.com's own signup CTA
+    points at.
+  transport: streamable-http
+  url: https://api.bidsystem.ai/mcp
+  console: https://admin.bidsystem.ai
+  website: https://bidsystem.ai
+  docs: none published
+  auth:
+    type: oauth2
+    authorization_server: https://token.bidsystem.ai
+    protected_resource_metadata: https://api.bidsystem.ai/.well-known/oauth-protected-resource
+    scopes_supported: [openid, profile]
+    description: >-
+      OAuth 2.0, mirroring the token.ezoic.com configuration exactly — PKCE (S256 only),
+      DPoP (ES256), dynamic client registration, device authorization, token exchange, and
+      the same vendor grant urn:bidsystem:params:oauth:grant-type:adcp-client-recovery.
+      Unlike the Ezoic-side resource, this one DOES publish scopes_supported.
+    see_also: scopes/ezoic-scopes.yml
+  tool_schema_status: gated
+  tools: []
+  tools_note: >-
+    Not enumerable anonymously. An unauthenticated initialize returns HTTP 401
+    {"code":401,"message":"Unauthorized","data":"authentication required: no access token
+    provided"} with a conformant WWW-Authenticate Bearer resource_metadata challenge.
+    Ezoic publishes no tool list for this server anywhere, so nothing is asserted about
+    its tools — an authenticated introspection is required.
+  evidence:
+  - url: https://api.bidsystem.ai/mcp
+    method: POST initialize
+    http_status: 401
+    checked: '2026-08-13'
+  - url: https://api.bidsystem.ai/.well-known/oauth-protected-resource
+    http_status: 200
+    checked: '2026-08-13'
+  observations:
+  - >-
+    The console at admin.bidsystem.ai carries a Chrome WebMCP origin-trial token
+    ({"origin":"https://admin.bidsystem.ai:443","feature":"WebMCP","expiry":1794873600} —
+    expires 2026-11-17), meaning Ezoic is trialling in-page agent tool exposure on its
+    advertiser console in addition to the server-side MCP endpoint.
+  - >-
+    https://www.bidsystem.ai/.well-known/agent-card.json returns HTTP 200 — but the body is
+    the console's SPA HTML shell, not an AgentCard. Recorded here explicitly as a REJECTED
+    false positive so a later round does not re-discover it and credit an A2A card that
+    does not exist. api.bidsystem.ai returns a proper {"error":"not_found"} 404 for the
+    same path.
+
+crosswalk: ezoic-tool-crosswalk.yml

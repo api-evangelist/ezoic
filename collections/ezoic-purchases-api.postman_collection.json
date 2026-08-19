@@ -1,0 +1,289 @@
+{
+  "item": [
+    {
+      "id": "5ba22ef1-5885-49df-b48a-f571b66a8a4b",
+      "name": "Purchases",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c94f6e87-50e3-4ced-b134-a7668d1a15f7",
+          "name": "List a reader's purchases",
+          "request": {
+            "name": "List a reader's purchases",
+            "description": {
+              "content": "Returns the identified reader's subscriptions and one-time purchases for the domain. Exactly one reader identity header must be supplied.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "purchases"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "developerKey",
+                  "value": "<string>",
+                  "description": "(Required) Your Ezoic API key."
+                },
+                {
+                  "disabled": false,
+                  "key": "domain",
+                  "value": "<string>",
+                  "description": "(Required) The domain being queried (must belong to your account)."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Reader's email address. Supply exactly one reader identity header.",
+                "key": "X-Ezoic-Reader-Email",
+                "value": "<email>"
+              },
+              {
+                "disabled": false,
+                "description": "Reader's Ezoic Subscriptions session JWT (visitor-account sites). Supply exactly one reader identity header.",
+                "key": "X-Ezoic-Reader-Token",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7308f3ca-3ac5-474f-8821-dcb6f65938c3",
+              "name": "Reader purchases",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "purchases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "developerKey",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "domain",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "developerKey",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Reader's email address. Supply exactly one reader identity header.",
+                    "key": "X-Ezoic-Reader-Email",
+                    "value": "<email>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Reader's Ezoic Subscriptions session JWT (visitor-account sites). Supply exactly one reader identity header.",
+                    "key": "X-Ezoic-Reader-Token",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"data\": [\n    {\n      \"productKey\": \"string\",\n      \"item\": \"string\",\n      \"status\": \"active\",\n      \"expiresAt\": \"1961-11-23T22:39:06.061Z\"\n    },\n    {\n      \"productKey\": \"string\",\n      \"item\": \"string\",\n      \"status\": \"active\",\n      \"expiresAt\": \"1952-07-28T06:32:54.726Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c5f14950-0637-4afd-8a89-71208b4f6a26",
+              "name": "Missing required parameters or duplicate identity headers.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "purchases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "developerKey",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "domain",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "developerKey",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Reader's email address. Supply exactly one reader identity header.",
+                    "key": "X-Ezoic-Reader-Email",
+                    "value": "<email>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Reader's Ezoic Subscriptions session JWT (visitor-account sites). Supply exactly one reader identity header.",
+                    "key": "X-Ezoic-Reader-Token",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6790ada1-04b6-47e4-99b4-470a84f8840e",
+              "name": "Subscriptions disabled for domain or invalid reader token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "purchases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "developerKey",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "domain",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "developerKey",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Reader's email address. Supply exactly one reader identity header.",
+                    "key": "X-Ezoic-Reader-Email",
+                    "value": "<email>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Reader's Ezoic Subscriptions session JWT (visitor-account sites). Supply exactly one reader identity header.",
+                    "key": "X-Ezoic-Reader-Token",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-gateway.ezoic.com/subscriptions/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "developerKey"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "query"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "31949345-5bf3-47eb-9c68-a1882d3eacc7",
+    "name": "Ezoic Subscriptions Server-to-Server REST Access Purchases API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Server-to-server REST API for Ezoic Subscriptions. Lets a publisher verify a reader's paid access and read a reader's subscriptions/purchases from their own backend, authenticated through the Ezoic API gateway. Faithfully modeled from the public documentation at https://docs.ezoic.com/docs/subscriptions/rest-api/.\n\nContact Support:\n Name: Ezoic Support",
+      "type": "text/plain"
+    }
+  }
+}

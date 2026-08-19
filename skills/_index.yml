@@ -1,8 +1,33 @@
-generated: '2026-07-19'
+generated: '2026-08-13'
 method: generated
-source: openapi/ezoic-subscriptions-openapi.yml
+source: >-
+  openapi/ezoic-access-api-openapi.yml , openapi/ezoic-products-api-openapi.yml ,
+  openapi/ezoic-purchases-api-openapi.yml ,
+  openapi/ezoic-big-data-analytics-api-openapi.yml , openapi/ezoic-cdn-api-openapi.yml
+note: >-
+  One packaged skill per marquee flow across the three Ezoic API-gateway services. Every
+  operationId referenced below exists in the linked spec. No provider-published
+  AGENTS.md or skills directory was found on docs.ezoic.com or in the github.com/ezoic
+  organization, so these are API Evangelist generations grounded in Ezoic's own reference
+  documentation.
 skills:
-  - file: ezoic-verify-reader-access.md
-    name: Verify an Ezoic Subscriptions reader's access
-    api: openapi/ezoic-subscriptions-openapi.yml
-    operations: [checkAccess, listProducts, listPurchases]
+- file: ezoic-verify-reader-access.md
+  name: Verify an Ezoic Subscriptions reader's access
+  api: openapi/ezoic-access-api-openapi.yml
+  service: Subscriptions
+  operations: [checkAccess, listProducts, listPurchases]
+- file: ezoic-pull-analytics-report.md
+  name: Pull an Ezoic analytics report
+  api: openapi/ezoic-big-data-analytics-api-openapi.yml
+  service: Big Data Analytics
+  operations: [getReports, getReport, getData, getColumns]
+- file: ezoic-build-custom-report.md
+  name: Build a custom Ezoic report with a segment
+  api: openapi/ezoic-big-data-analytics-api-openapi.yml
+  service: Big Data Analytics
+  operations: [getColumns, getMultiFilters, getMultiFilterTypes, createSegment, createCustomReport, getCustomReports, getData, getCustomData, getSegments]
+- file: ezoic-purge-cdn-cache.md
+  name: Clear or purge the Ezoic CDN cache
+  api: openapi/ezoic-cdn-api-openapi.yml
+  service: CDN
+  operations: [cdnPing, clearCache, bulkClearCache, clearBySurrogateKeys, purgeCache]
