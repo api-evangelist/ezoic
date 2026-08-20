@@ -46,6 +46,21 @@ tags:
 - Publisher Monetization
 - Analytics
 - Reporting
+- Subscription
+- Paywalls
+- Identity
+- CDN
+- Caching
+- MCP
+- Authentication
+- Agents
+tags_raw:
+- Company
+- Advertising
+- AdTech
+- Publisher Monetization
+- Analytics
+- Reporting
 - Subscriptions
 - Paywalls
 - Identity
@@ -79,6 +94,8 @@ apis:
   humanURL: https://docs.ezoic.com/docs/subscriptions/rest-api/
   baseURL: https://api-gateway.ezoic.com/subscriptions/v1
   tags:
+  - Product
+  tags_raw:
   - Products
   properties:
   - type: OpenAPI
