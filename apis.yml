@@ -126,44 +126,13 @@ apis:
     url: https://docs.ezoic.com/docs/subscriptions/rest-api/
   - type: Documentation
     url: https://docs.ezoic.com/docs/subscriptions/getting-started/
-- aid: ezoic:ezoic-big-data-analytics-api
-  name: ezoic Big Data Analytics API
-  description: >-
-    The Big Data Analytics (BDA) REST API pulls the same reports and analytics data a
-    publisher sees in the Ezoic dashboard — predefined reports that ship with the account
-    and custom reports the publisher builds. 11 operations covering report definitions,
-    report data, ad-hoc custom data, segments, and the multifilters that build them.
-    Enabled per-service from Settings → API Access and authenticated with the shared
-    Ezoic API-gateway developerKey.
-  humanURL: https://docs.ezoic.com/docs/api/bdaservices/
-  baseURL: https://api-gateway.ezoic.com
-  tags:
-  - Analytics
-  - Reports
-  - Data
-  - Segments
-  - Filters
-  properties:
-  - type: OpenAPI
-    url: openapi/ezoic-big-data-analytics-api-openapi.yml
-  - type: Overlay
-    url: overlays/ezoic-big-data-analytics-overlay.yaml
-  - type: APIReference
-    url: https://docs.ezoic.com/docs/api/bdaservices/
-  - type: Documentation
-    url: https://docs.ezoic.com/docs/api/
-  - type: AgentSkill
-    url: skills/ezoic-pull-analytics-report.md
-  - type: AgentSkill
-    url: skills/ezoic-build-custom-report.md
 - aid: ezoic:ezoic-cdn-api
   name: ezoic CDN API
   description: >-
-    The CDN REST API clears and purges cached content on the Ezoic CDN — a single URL, a
-    batch of URLs in groups of 100, a comma-separated set of surrogate keys, or a whole
-    domain — plus a ping liveness check. 5 operations under /cdnservices/, enabled from
-    Settings → API Access and authenticated with the shared Ezoic API-gateway
-    developerKey.
+    The CDN REST API clears and purges cached content on the Ezoic CDN — a single URL, a batch of URLs
+    in groups of 100, a comma-separated set of surrogate keys, or a whole domain — plus a ping liveness
+    check. 5 operations under /cdnservices/, enabled from Settings → API Access and authenticated with
+    the shared Ezoic API-gateway developerKey.
   humanURL: https://docs.ezoic.com/docs/api/cdn/
   baseURL: https://api-gateway.ezoic.com
   tags:
@@ -180,12 +149,74 @@ apis:
     url: https://docs.ezoic.com/docs/api/
   - type: AgentSkill
     url: skills/ezoic-purge-cdn-cache.md
+- aid: ezoic:ezoic-data-api
+  name: ezoic Data API
+  description: Pulling report data and ad-hoc custom data.
+  humanURL: https://docs.ezoic.com/docs/subscriptions/rest-api/
+  baseURL: https://api-gateway.ezoic.com/subscriptions/v1
+  tags:
+  - Data
+  properties:
+  - type: OpenAPI
+    url: openapi/ezoic-data-api-openapi.yml
+  - type: APIReference
+    url: https://docs.ezoic.com/docs/api/bdaservices/
+  - type: Documentation
+    url: https://docs.ezoic.com/docs/api/
+- aid: ezoic:ezoic-filters-api
+  name: ezoic Filters API
+  description: Multifilters and multifilter types used to build segments.
+  humanURL: https://docs.ezoic.com/docs/subscriptions/rest-api/
+  baseURL: https://api-gateway.ezoic.com/subscriptions/v1
+  tags:
+  - Filters
+  properties:
+  - type: OpenAPI
+    url: openapi/ezoic-filters-api-openapi.yml
+  - type: APIReference
+    url: https://docs.ezoic.com/docs/api/bdaservices/
+  - type: Documentation
+    url: https://docs.ezoic.com/docs/api/
+- aid: ezoic:ezoic-reports-api
+  name: ezoic Reports API
+  description: Predefined and custom report definitions.
+  humanURL: https://docs.ezoic.com/docs/subscriptions/rest-api/
+  baseURL: https://api-gateway.ezoic.com/subscriptions/v1
+  tags:
+  - Reports
+  properties:
+  - type: OpenAPI
+    url: openapi/ezoic-reports-api-openapi.yml
+  - type: APIReference
+    url: https://docs.ezoic.com/docs/api/bdaservices/
+  - type: Documentation
+    url: https://docs.ezoic.com/docs/api/
+- aid: ezoic:ezoic-segments-api
+  name: ezoic Segments API
+  description: Segments that split report data into categories.
+  humanURL: https://docs.ezoic.com/docs/subscriptions/rest-api/
+  baseURL: https://api-gateway.ezoic.com/subscriptions/v1
+  tags:
+  - Segments
+  properties:
+  - type: OpenAPI
+    url: openapi/ezoic-segments-api-openapi.yml
+  - type: APIReference
+    url: https://docs.ezoic.com/docs/api/bdaservices/
+  - type: Documentation
+    url: https://docs.ezoic.com/docs/api/
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/ezoic-big-data-analytics-overlay.yaml
+- type: AgentSkill
+  url: skills/ezoic-pull-analytics-report.md
+- type: AgentSkill
+  url: skills/ezoic-build-custom-report.md
 - type: Overlay
   url: overlays/ezoic-subscriptions-overlay.yaml
 - type: DeveloperPortal
