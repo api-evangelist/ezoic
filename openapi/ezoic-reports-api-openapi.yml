@@ -1,0 +1,175 @@
+openapi: 3.2.0
+info:
+  title: Ezoic Big Data Analytics Reports API
+  version: v1
+  description: REST API for pulling the same reports and analytics data a publisher sees in the Ezoic dashboard — predefined reports that ship with the account, and custom reports the publisher builds. Endpoints live under /bdaservices/ on the Ezoic API gateway and are authenticated with the shared Ezoic API-gateway developerKey. Faithfully modeled from the public documentation at https://docs.ezoic.com/docs/api/bdaservices/ — every path, request field and enumerated value below is stated on that page or the API landing page at https://docs.ezoic.com/docs/api/.
+  x-apievangelist-method: generated
+  x-apievangelist-source: https://docs.ezoic.com/docs/api/bdaservices/
+  contact:
+    name: Ezoic Support
+    url: https://support.ezoic.com/
+servers:
+- url: https://api-gateway.ezoic.com
+  description: Ezoic API gateway (production)
+security:
+- developerKey: []
+tags:
+- name: Reports
+  description: Predefined and custom report definitions.
+paths:
+  /bdaservices/getreports/:
+    get:
+      operationId: getReports
+      summary: List predefined report names
+      description: Returns the list of predefined report names available on the account.
+      tags:
+      - Reports
+      parameters:
+      - $ref: '#/components/parameters/developerKey'
+      responses:
+        '200':
+          description: A list of predefined report names.
+          content:
+            application/json: {}
+  /bdaservices/getreport/:
+    get:
+      operationId: getReport
+      summary: Get a predefined report definition
+      description: Returns the definition of a single predefined report, including its DateBaseSelectId (BASE_NOT_SELECTED means the report carries no built-in date range and getdata must be given one).
+      tags:
+      - Reports
+      parameters:
+      - $ref: '#/components/parameters/developerKey'
+      - name: reportName
+        in: query
+        required: true
+        description: The predefined report name, for example revenueDaily.
+        schema:
+          type: string
+          example: revenueDaily
+      responses:
+        '200':
+          description: The report definition.
+          content:
+            application/json: {}
+  /bdaservices/getcustomreports/:
+    get:
+      operationId: getCustomReports
+      summary: List custom reports
+      description: Returns all custom reports on the account, with their ids and names.
+      tags:
+      - Reports
+      parameters:
+      - $ref: '#/components/parameters/developerKey'
+      responses:
+        '200':
+          description: The account's custom reports.
+          content:
+            application/json: {}
+  /bdaservices/createcustomreport/:
+    post:
+      operationId: createCustomReport
+      summary: Create a custom report
+      description: Create a saved custom report, choosing its dimension and metric columns, its segments, its sort order, and an optional default date range. Returns the new custom report's id.
+      tags:
+      - Reports
+      parameters:
+      - $ref: '#/components/parameters/developerKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - ReportTitle
+              - Charts
+              properties:
+                ReportTitle:
+                  type: string
+                  example: My Custom Revenue Report
+                ReportDateRange:
+                  type: object
+                  description: Default date range for the report. Setting BaseSelectId to BASE_LAST_7 means a getdata request with no dates defaults to the last seven days.
+                  properties:
+                    BaseSelectId:
+                      type: string
+                      example: BASE_LAST_7
+                Charts:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      Name:
+                        type: string
+                      DimensionColumns:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Column'
+                      MetricColumns:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Column'
+                      Segments:
+                        type: array
+                        items:
+                          type: object
+                      Order:
+                        $ref: '#/components/schemas/Order'
+      responses:
+        '200':
+          description: The created custom report, including its id.
+          content:
+            application/json: {}
+  /bdaservices/getcolumns/:
+    get:
+      operationId: getColumns
+      summary: List available report columns
+      description: Returns the dimension and metric columns available for building custom reports, for example report_day, visits, pageviews, revenue, epmv, copy_paste_per_pageview.
+      tags:
+      - Reports
+      parameters:
+      - $ref: '#/components/parameters/developerKey'
+      responses:
+        '200':
+          description: The available columns.
+          content:
+            application/json: {}
+components:
+  schemas:
+    Column:
+      type: object
+      description: A dimension or metric column.
+      properties:
+        Data:
+          type: string
+          example: report_day
+        Type:
+          type: string
+          example: string
+    Order:
+      type: object
+      description: Sort by column index and direction.
+      properties:
+        ColumnNumber:
+          type: integer
+          example: 0
+        Direction:
+          type: string
+          enum:
+          - ASC
+          - DESC
+  parameters:
+    developerKey:
+      name: developerKey
+      in: query
+      required: true
+      description: Your Ezoic API key, from Settings -> API Access in the Ezoic dashboard. Shared across every Ezoic API-gateway service you have enabled.
+      schema:
+        type: string
+  securitySchemes:
+    developerKey:
+      type: apiKey
+      in: query
+      name: developerKey
+      description: Your Ezoic API-gateway developer key, passed as a query parameter.

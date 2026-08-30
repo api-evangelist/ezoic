@@ -1,0 +1,221 @@
+openapi: 3.2.0
+info:
+  title: Ezoic Big Analytics Data API
+  version: v1
+  description: REST API for pulling the same reports and analytics data a publisher sees in the Ezoic dashboard — predefined reports that ship with the account, and custom reports the publisher builds. Endpoints live under /bdaservices/ on the Ezoic API gateway and are authenticated with the shared Ezoic API-gateway developerKey. Faithfully modeled from the public documentation at https://docs.ezoic.com/docs/api/bdaservices/ — every path, request field and enumerated value below is stated on that page or the API landing page at https://docs.ezoic.com/docs/api/.
+  x-apievangelist-method: generated
+  x-apievangelist-source: https://docs.ezoic.com/docs/api/bdaservices/
+  contact:
+    name: Ezoic Support
+    url: https://support.ezoic.com/
+servers:
+- url: https://api-gateway.ezoic.com
+  description: Ezoic API gateway (production)
+security:
+- developerKey: []
+tags:
+- name: Data
+  description: Pulling report data and ad-hoc custom data.
+paths:
+  /bdaservices/getdata/:
+    post:
+      operationId: getData
+      summary: Get data for a predefined or custom report
+      description: Pull the rows for a report. Identify the report with either reportName (a predefined report) or customReportId (a saved custom report). MaxItems is required; paginate large result sets by incrementing StartItem. A date range is required when the report has no built-in one (DateBaseSelectId BASE_NOT_SELECTED).
+      tags:
+      - Data
+      parameters:
+      - $ref: '#/components/parameters/developerKey'
+      - name: reportName
+        in: query
+        required: false
+        description: A predefined report name. Supply reportName OR customReportId.
+        schema:
+          type: string
+          example: revenueDaily
+      - name: customReportId
+        in: query
+        required: false
+        description: A saved custom report id. Supply reportName OR customReportId.
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - MaxItems
+              properties:
+                StartItem:
+                  type: integer
+                  description: First row to return (pagination cursor).
+                  example: 0
+                MaxItems:
+                  type: integer
+                  description: Maximum rows to return. Required.
+                  example: 10
+                Platform:
+                  $ref: '#/components/schemas/Platform'
+                DomainId:
+                  type: integer
+                  description: The site to query.
+                DateGrouping:
+                  $ref: '#/components/schemas/DateGrouping'
+                SegmentIds:
+                  type: array
+                  description: Optional segment ids. Splits a single row into multiple segments. When a custom report embeds segments, those are used if none are supplied here; otherwise the request's segments take precedence.
+                  items:
+                    type: integer
+                StartDate:
+                  type: string
+                  format: date
+                  example: '2018-10-01'
+                EndDate:
+                  type: string
+                  format: date
+                  example: '2018-10-01'
+      responses:
+        '200':
+          description: The report rows.
+          content:
+            application/json: {}
+  /bdaservices/getCustomData/:
+    post:
+      operationId: getCustomData
+      summary: Get custom data without a saved report
+      description: Pull data in one call without first creating a saved custom report, by naming the dimension and metric columns inline.
+      tags:
+      - Data
+      parameters:
+      - $ref: '#/components/parameters/developerKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - StartDate
+              - EndDate
+              - DimensionColumns
+              - MetricColumns
+              properties:
+                StartItem:
+                  type: integer
+                  description: First row to return (pagination). Omit both StartItem and MaxItems, or set both to 0, to return all rows.
+                MaxItems:
+                  type: integer
+                  description: Maximum rows to return (pagination).
+                Platform:
+                  $ref: '#/components/schemas/Platform'
+                DomainId:
+                  type: integer
+                  description: Site to query. Omit to include all sites on the account.
+                StartDate:
+                  type: string
+                  format: date
+                  example: '2026-07-24'
+                EndDate:
+                  type: string
+                  format: date
+                  example: '2026-07-30'
+                SegmentIds:
+                  type: array
+                  description: Segment IDs. Defaults to All Users ([1]) when empty.
+                  items:
+                    type: integer
+                DimensionColumns:
+                  type: array
+                  description: Grouping columns, for example report_day or reward_id.
+                  items:
+                    $ref: '#/components/schemas/Column'
+                MetricColumns:
+                  type: array
+                  description: Metrics to return, for example revenue or reward_revenue.
+                  items:
+                    $ref: '#/components/schemas/Column'
+                Order:
+                  $ref: '#/components/schemas/Order'
+                Filters:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Filter'
+                RevenueDecimalPlaces:
+                  type: integer
+                  description: 2-6 decimal places for USD metrics. Omit (or 0) for the default of 2.
+                  minimum: 0
+                  maximum: 6
+      responses:
+        '200':
+          description: The requested rows.
+          content:
+            application/json: {}
+components:
+  schemas:
+    DateGrouping:
+      type: string
+      description: Whether data is grouped by day, week, or month.
+      example: DAILY
+    Platform:
+      type: string
+      description: Which platform's data to return. ALL is the combined figure.
+      enum:
+      - EZOIC
+      - ORIG
+      - ALL
+    Order:
+      type: object
+      description: Sort by column index and direction.
+      properties:
+        ColumnNumber:
+          type: integer
+          example: 0
+        Direction:
+          type: string
+          enum:
+          - ASC
+          - DESC
+    Column:
+      type: object
+      description: A dimension or metric column.
+      properties:
+        Data:
+          type: string
+          example: report_day
+        Type:
+          type: string
+          example: string
+    Filter:
+      type: object
+      description: A row filter applied to a column.
+      properties:
+        Type:
+          type: string
+          enum:
+          - INCLUDE
+          - EXCLUDE
+        FilterKey:
+          type: string
+          example: epmv
+        OperationId:
+          type: string
+          example: GREATER
+        FilterValue:
+          type: string
+          example: '3'
+  parameters:
+    developerKey:
+      name: developerKey
+      in: query
+      required: true
+      description: Your Ezoic API key, from Settings -> API Access in the Ezoic dashboard. Shared across every Ezoic API-gateway service you have enabled.
+      schema:
+        type: string
+  securitySchemes:
+    developerKey:
+      type: apiKey
+      in: query
+      name: developerKey
+      description: Your Ezoic API-gateway developer key, passed as a query parameter.

@@ -1,0 +1,84 @@
+openapi: 3.2.0
+info:
+  title: Ezoic Big Data Analytics Segments API
+  version: v1
+  description: REST API for pulling the same reports and analytics data a publisher sees in the Ezoic dashboard — predefined reports that ship with the account, and custom reports the publisher builds. Endpoints live under /bdaservices/ on the Ezoic API gateway and are authenticated with the shared Ezoic API-gateway developerKey. Faithfully modeled from the public documentation at https://docs.ezoic.com/docs/api/bdaservices/ — every path, request field and enumerated value below is stated on that page or the API landing page at https://docs.ezoic.com/docs/api/.
+  x-apievangelist-method: generated
+  x-apievangelist-source: https://docs.ezoic.com/docs/api/bdaservices/
+  contact:
+    name: Ezoic Support
+    url: https://support.ezoic.com/
+servers:
+- url: https://api-gateway.ezoic.com
+  description: Ezoic API gateway (production)
+security:
+- developerKey: []
+tags:
+- name: Segments
+  description: Segments that split report data into categories.
+paths:
+  /bdaservices/getsegments/:
+    get:
+      operationId: getSegments
+      summary: List segments
+      description: Returns both custom segments created on the account and premade ones, such as "All Users" (no filter) and "Desktop Traffic".
+      tags:
+      - Segments
+      parameters:
+      - $ref: '#/components/parameters/developerKey'
+      responses:
+        '200':
+          description: The available segments.
+          content:
+            application/json: {}
+  /bdaservices/createsegment/:
+    post:
+      operationId: createSegment
+      summary: Create a segment
+      description: Create a segment from multifilters (preset groups such as device, country, gender, site) and/or filters (an operation such as greater than, contains, matches exactly). Returns the segment object with its id filled in.
+      tags:
+      - Segments
+      parameters:
+      - $ref: '#/components/parameters/developerKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - SegmentName
+              properties:
+                SegmentName:
+                  type: string
+                  example: US and Canada
+                SegmentMultiFilters:
+                  type: object
+                  description: Map of MultiFilterId to the filter values selected for it. The Country multifilter's option keys are two-character country codes.
+                  additionalProperties:
+                    type: object
+                    properties:
+                      FilterValues:
+                        type: array
+                        items:
+                          type: string
+      responses:
+        '200':
+          description: The created segment, including its id.
+          content:
+            application/json: {}
+components:
+  parameters:
+    developerKey:
+      name: developerKey
+      in: query
+      required: true
+      description: Your Ezoic API key, from Settings -> API Access in the Ezoic dashboard. Shared across every Ezoic API-gateway service you have enabled.
+      schema:
+        type: string
+  securitySchemes:
+    developerKey:
+      type: apiKey
+      in: query
+      name: developerKey
+      description: Your Ezoic API-gateway developer key, passed as a query parameter.
