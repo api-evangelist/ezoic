@@ -1,20 +1,156 @@
-generated: '2026-07-19'
+generated: '2026-09-16'
 method: generated
-source: openapi/ezoic-subscriptions-openapi.yml
+source: openapi/ezoic-access-api-openapi.yml, openapi/ezoic-cdn-api-openapi.yml, openapi/ezoic-data-api-openapi.yml,
+  openapi/ezoic-filters-api-openapi.yml, openapi/ezoic-products-api-openapi.yml, openapi/ezoic-purchases-api-openapi.yml,
+  openapi/ezoic-reports-api-openapi.yml, openapi/ezoic-segments-api-openapi.yml
 description: Recommended x-agentic-access execution contracts, classified heuristically from
   the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
   audience per deployment. See research/curity/agentic-governance/.
 summary:
-  operations: 3
+  operations: 19
   by_action_class:
-    connected: 3
+    connected: 10
+    acting: 9
   by_consequence:
-    read: 3
+    read: 10
+    write: 9
   human_in_the_loop_required: 0
 operations:
 - path: /access
   method: get
   operationId: checkAccess
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /cdnservices/ping/
+  method: post
+  operationId: cdnPing
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /cdnservices/clearcache
+  method: post
+  operationId: clearCache
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /cdnservices/bulkclearcache
+  method: post
+  operationId: bulkClearCache
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /cdnservices/clearbysurrogatekeys
+  method: post
+  operationId: clearBySurrogateKeys
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /cdnservices/purgecache
+  method: post
+  operationId: purgeCache
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /bdaservices/getdata/
+  method: post
+  operationId: getData
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /bdaservices/getCustomData/
+  method: post
+  operationId: getCustomData
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /bdaservices/getmultifilters/
+  method: get
+  operationId: getMultiFilters
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /bdaservices/getmultifiltertypes/
+  method: get
+  operationId: getMultiFilterTypes
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -42,3 +178,85 @@ operations:
     token:
       max-ttl: 3600
     audit: none
+- path: /bdaservices/getreports/
+  method: get
+  operationId: getReports
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /bdaservices/getreport/
+  method: get
+  operationId: getReport
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /bdaservices/getcustomreports/
+  method: get
+  operationId: getCustomReports
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /bdaservices/createcustomreport/
+  method: post
+  operationId: createCustomReport
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /bdaservices/getcolumns/
+  method: get
+  operationId: getColumns
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /bdaservices/getsegments/
+  method: get
+  operationId: getSegments
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /bdaservices/createsegment/
+  method: post
+  operationId: createSegment
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
