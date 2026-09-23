@@ -1,18 +1,41 @@
 {
   "provider": "ezoic",
   "sources": [
-    "ezoic-access-api-openapi.yml",
-    "ezoic-products-api-openapi.yml",
-    "ezoic-purchases-api-openapi.yml"
+    "_original/ezoic-big-data-analytics-api-openapi.yml",
+    "_original/ezoic-subscriptions-openapi.yml",
+    "ezoic-cdn-api-openapi.yml"
   ],
   "outputs": [
+    "ezoic-data-api-openapi.yml",
+    "ezoic-filters-api-openapi.yml",
+    "ezoic-reports-api-openapi.yml",
+    "ezoic-segments-api-openapi.yml",
     "ezoic-access-api-openapi.yml",
     "ezoic-products-api-openapi.yml",
-    "ezoic-purchases-api-openapi.yml"
+    "ezoic-purchases-api-openapi.yml",
+    "ezoic-cdn-api-openapi.yml"
   ],
   "archived": [],
   "errors": [],
-  "warnings": [],
-  "notes": [],
-  "skipped": []
+  "warnings": [
+    "ezoic-cdn-api-openapi.yml: previously refined output kept for 5 operation(s) no archived document covers (e.g. /cdnservices/bulkclearcache post, /cdnservices/clearbysurrogatekeys post, /cdnservices/clearcache post); its other 0 operation(s) came from the archive and were dropped from it. The archive is incomplete for this provider \u2014 re-harvest to restore _original/ as the full source of truth."
+  ],
+  "notes": [
+    "sourced from openapi/_original/ (2 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "ezoic-big-data-analytics-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "ezoic-subscriptions-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "ezoic-subscriptions-openapi.yml: declared missing tag: Access",
+    "ezoic-subscriptions-openapi.yml: declared missing tag: Products",
+    "ezoic-subscriptions-openapi.yml: declared missing tag: Purchases",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "ezoic-access-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "ezoic-data-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "ezoic-filters-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "ezoic-products-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "ezoic-purchases-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "ezoic-reports-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "ezoic-segments-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

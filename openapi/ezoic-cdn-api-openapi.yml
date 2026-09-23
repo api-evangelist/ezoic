@@ -1,13 +1,8 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Ezoic CDN API
   version: v1
-  description: >-
-    REST API for clearing and purging cached content on the Ezoic CDN. Endpoints live
-    under /cdnservices/ on the Ezoic API gateway and are authenticated with the shared
-    Ezoic API-gateway developerKey. Faithfully modeled from the public documentation at
-    https://docs.ezoic.com/docs/api/cdn/ — every path, field, requirement and response
-    shape below is stated on that page.
+  description: REST API for clearing and purging cached content on the Ezoic CDN. Endpoints live under /cdnservices/ on the Ezoic API gateway and are authenticated with the shared Ezoic API-gateway developerKey. Faithfully modeled from the public documentation at https://docs.ezoic.com/docs/api/cdn/ — every path, field, requirement and response shape below is stated on that page.
   x-apievangelist-method: generated
   x-apievangelist-source: https://docs.ezoic.com/docs/api/cdn/
   contact:
@@ -140,30 +135,7 @@ paths:
         '200':
           $ref: '#/components/responses/CdnResult'
 components:
-  parameters:
-    developerKey:
-      name: developerKey
-      in: query
-      required: true
-      description: >-
-        Your Ezoic API key, from Settings -> API Access in the Ezoic dashboard. Shared
-        across every Ezoic API-gateway service you have enabled.
-      schema:
-        type: string
-  responses:
-    CdnResult:
-      description: Standard CDN service result envelope.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/CdnResult'
   schemas:
-    BareDomain:
-      type: string
-      description: >-
-        The bare domain, without a subdomain (such as www.), a scheme (such as https://),
-        or a path (such as /).
-      example: example.com
     CdnResult:
       type: object
       description: Every CDN endpoint returns the same response shape.
@@ -174,6 +146,25 @@ components:
         Error:
           type: string
           example: ''
+    BareDomain:
+      type: string
+      description: The bare domain, without a subdomain (such as www.), a scheme (such as https://), or a path (such as /).
+      example: example.com
+  responses:
+    CdnResult:
+      description: Standard CDN service result envelope.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CdnResult'
+  parameters:
+    developerKey:
+      name: developerKey
+      in: query
+      required: true
+      description: Your Ezoic API key, from Settings -> API Access in the Ezoic dashboard. Shared across every Ezoic API-gateway service you have enabled.
+      schema:
+        type: string
   securitySchemes:
     developerKey:
       type: apiKey

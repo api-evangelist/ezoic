@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Ezoic Big Data Analytics Reports API
   version: v1
-  description: REST API for pulling the same reports and analytics data a publisher sees in the Ezoic dashboard — predefined reports that ship with the account, and custom reports the publisher builds. Endpoints live under /bdaservices/ on the Ezoic API gateway and are authenticated with the shared Ezoic API-gateway developerKey. Faithfully modeled from the public documentation at https://docs.ezoic.com/docs/api/bdaservices/ — every path, request field and enumerated value below is stated on that page or the API landing page at https://docs.ezoic.com/docs/api/.
+  description: REST API for pulling the same reports and analytics data a publisher sees in the Ezoic dashboard — predefined reports that ship with the account, and custom reports the publisher builds.
   x-apievangelist-method: generated
   x-apievangelist-source: https://docs.ezoic.com/docs/api/bdaservices/
   contact:
@@ -137,16 +137,6 @@ paths:
             application/json: {}
 components:
   schemas:
-    Column:
-      type: object
-      description: A dimension or metric column.
-      properties:
-        Data:
-          type: string
-          example: report_day
-        Type:
-          type: string
-          example: string
     Order:
       type: object
       description: Sort by column index and direction.
@@ -159,6 +149,16 @@ components:
           enum:
           - ASC
           - DESC
+    Column:
+      type: object
+      description: A dimension or metric column.
+      properties:
+        Data:
+          type: string
+          example: report_day
+        Type:
+          type: string
+          example: string
   parameters:
     developerKey:
       name: developerKey

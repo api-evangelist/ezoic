@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Ezoic Subscriptions Server-to-Server REST Access Products API
+  title: Ezoic Subscriptions Server-to-Server REST Products API
   version: v1
   description: Server-to-server REST API for Ezoic Subscriptions. Lets a publisher verify a reader's paid access and read a reader's subscriptions/purchases from their own backend, authenticated through the Ezoic API gateway. Faithfully modeled from the public documentation at https://docs.ezoic.com/docs/subscriptions/rest-api/.
   x-apievangelist-method: searched
@@ -46,18 +46,27 @@ paths:
           $ref: '#/components/responses/Forbidden'
 components:
   responses:
-    BadRequest:
-      description: Missing required parameters or duplicate identity headers.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     Forbidden:
       description: Subscriptions disabled for domain or invalid reader token.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Missing required parameters or duplicate identity headers.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
   parameters:
     developerKey:
       name: developerKey
@@ -73,15 +82,6 @@ components:
       description: The domain being queried (must belong to your account).
       schema:
         type: string
-  schemas:
-    Error:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: false
-        message:
-          type: string
   securitySchemes:
     developerKey:
       type: apiKey
