@@ -150,13 +150,6 @@ components:
       type: string
       description: The bare domain, without a subdomain (such as www.), a scheme (such as https://), or a path (such as /).
       example: example.com
-  responses:
-    CdnResult:
-      description: Standard CDN service result envelope.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/CdnResult'
   parameters:
     developerKey:
       name: developerKey
@@ -165,6 +158,13 @@ components:
       description: Your Ezoic API key, from Settings -> API Access in the Ezoic dashboard. Shared across every Ezoic API-gateway service you have enabled.
       schema:
         type: string
+  responses:
+    CdnResult:
+      description: Standard CDN service result envelope.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CdnResult'
   securitySchemes:
     developerKey:
       type: apiKey

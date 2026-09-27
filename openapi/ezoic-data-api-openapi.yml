@@ -153,18 +153,15 @@ paths:
           content:
             application/json: {}
 components:
+  parameters:
+    developerKey:
+      name: developerKey
+      in: query
+      required: true
+      description: Your Ezoic API key, from Settings -> API Access in the Ezoic dashboard. Shared across every Ezoic API-gateway service you have enabled.
+      schema:
+        type: string
   schemas:
-    Platform:
-      type: string
-      description: Which platform's data to return. ALL is the combined figure.
-      enum:
-      - EZOIC
-      - ORIG
-      - ALL
-    DateGrouping:
-      type: string
-      description: Whether data is grouped by day, week, or month.
-      example: DAILY
     Order:
       type: object
       description: Sort by column index and direction.
@@ -205,14 +202,17 @@ components:
         Type:
           type: string
           example: string
-  parameters:
-    developerKey:
-      name: developerKey
-      in: query
-      required: true
-      description: Your Ezoic API key, from Settings -> API Access in the Ezoic dashboard. Shared across every Ezoic API-gateway service you have enabled.
-      schema:
-        type: string
+    DateGrouping:
+      type: string
+      description: Whether data is grouped by day, week, or month.
+      example: DAILY
+    Platform:
+      type: string
+      description: Which platform's data to return. ALL is the combined figure.
+      enum:
+      - EZOIC
+      - ORIG
+      - ALL
   securitySchemes:
     developerKey:
       type: apiKey
