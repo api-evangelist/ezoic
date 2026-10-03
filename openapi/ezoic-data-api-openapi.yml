@@ -153,14 +153,6 @@ paths:
           content:
             application/json: {}
 components:
-  parameters:
-    developerKey:
-      name: developerKey
-      in: query
-      required: true
-      description: Your Ezoic API key, from Settings -> API Access in the Ezoic dashboard. Shared across every Ezoic API-gateway service you have enabled.
-      schema:
-        type: string
   schemas:
     Order:
       type: object
@@ -192,6 +184,10 @@ components:
         FilterValue:
           type: string
           example: '3'
+    DateGrouping:
+      type: string
+      description: Whether data is grouped by day, week, or month.
+      example: DAILY
     Column:
       type: object
       description: A dimension or metric column.
@@ -202,10 +198,6 @@ components:
         Type:
           type: string
           example: string
-    DateGrouping:
-      type: string
-      description: Whether data is grouped by day, week, or month.
-      example: DAILY
     Platform:
       type: string
       description: Which platform's data to return. ALL is the combined figure.
@@ -213,6 +205,14 @@ components:
       - EZOIC
       - ORIG
       - ALL
+  parameters:
+    developerKey:
+      name: developerKey
+      in: query
+      required: true
+      description: Your Ezoic API key, from Settings -> API Access in the Ezoic dashboard. Shared across every Ezoic API-gateway service you have enabled.
+      schema:
+        type: string
   securitySchemes:
     developerKey:
       type: apiKey

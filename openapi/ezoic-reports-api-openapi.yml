@@ -136,25 +136,7 @@ paths:
           content:
             application/json: {}
 components:
-  parameters:
-    developerKey:
-      name: developerKey
-      in: query
-      required: true
-      description: Your Ezoic API key, from Settings -> API Access in the Ezoic dashboard. Shared across every Ezoic API-gateway service you have enabled.
-      schema:
-        type: string
   schemas:
-    Column:
-      type: object
-      description: A dimension or metric column.
-      properties:
-        Data:
-          type: string
-          example: report_day
-        Type:
-          type: string
-          example: string
     Order:
       type: object
       description: Sort by column index and direction.
@@ -167,6 +149,24 @@ components:
           enum:
           - ASC
           - DESC
+    Column:
+      type: object
+      description: A dimension or metric column.
+      properties:
+        Data:
+          type: string
+          example: report_day
+        Type:
+          type: string
+          example: string
+  parameters:
+    developerKey:
+      name: developerKey
+      in: query
+      required: true
+      description: Your Ezoic API key, from Settings -> API Access in the Ezoic dashboard. Shared across every Ezoic API-gateway service you have enabled.
+      schema:
+        type: string
   securitySchemes:
     developerKey:
       type: apiKey

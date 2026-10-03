@@ -58,36 +58,6 @@ paths:
         '403':
           $ref: '#/components/responses/Forbidden'
 components:
-  parameters:
-    developerKey:
-      name: developerKey
-      in: query
-      required: true
-      description: Your Ezoic API key.
-      schema:
-        type: string
-    readerEmail:
-      name: X-Ezoic-Reader-Email
-      in: header
-      required: false
-      description: Reader's email address. Supply exactly one reader identity header.
-      schema:
-        type: string
-        format: email
-    domain:
-      name: domain
-      in: query
-      required: true
-      description: The domain being queried (must belong to your account).
-      schema:
-        type: string
-    readerToken:
-      name: X-Ezoic-Reader-Token
-      in: header
-      required: false
-      description: Reader's Ezoic Subscriptions session JWT (visitor-account sites). Supply exactly one reader identity header.
-      schema:
-        type: string
   schemas:
     Error:
       type: object
@@ -110,6 +80,36 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+  parameters:
+    domain:
+      name: domain
+      in: query
+      required: true
+      description: The domain being queried (must belong to your account).
+      schema:
+        type: string
+    readerToken:
+      name: X-Ezoic-Reader-Token
+      in: header
+      required: false
+      description: Reader's Ezoic Subscriptions session JWT (visitor-account sites). Supply exactly one reader identity header.
+      schema:
+        type: string
+    readerEmail:
+      name: X-Ezoic-Reader-Email
+      in: header
+      required: false
+      description: Reader's email address. Supply exactly one reader identity header.
+      schema:
+        type: string
+        format: email
+    developerKey:
+      name: developerKey
+      in: query
+      required: true
+      description: Your Ezoic API key.
+      schema:
+        type: string
   securitySchemes:
     developerKey:
       type: apiKey
