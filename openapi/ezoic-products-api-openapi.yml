@@ -45,15 +45,21 @@ paths:
         '403':
           $ref: '#/components/responses/Forbidden'
 components:
-  schemas:
-    Error:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: false
-        message:
-          type: string
+  parameters:
+    developerKey:
+      name: developerKey
+      in: query
+      required: true
+      description: Your Ezoic API key.
+      schema:
+        type: string
+    domain:
+      name: domain
+      in: query
+      required: true
+      description: The domain being queried (must belong to your account).
+      schema:
+        type: string
   responses:
     Forbidden:
       description: Subscriptions disabled for domain or invalid reader token.
@@ -67,21 +73,15 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-  parameters:
-    domain:
-      name: domain
-      in: query
-      required: true
-      description: The domain being queried (must belong to your account).
-      schema:
-        type: string
-    developerKey:
-      name: developerKey
-      in: query
-      required: true
-      description: Your Ezoic API key.
-      schema:
-        type: string
+  schemas:
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
   securitySchemes:
     developerKey:
       type: apiKey

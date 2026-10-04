@@ -153,7 +153,26 @@ paths:
           content:
             application/json: {}
 components:
+  parameters:
+    developerKey:
+      name: developerKey
+      in: query
+      required: true
+      description: Your Ezoic API key, from Settings -> API Access in the Ezoic dashboard. Shared across every Ezoic API-gateway service you have enabled.
+      schema:
+        type: string
   schemas:
+    Platform:
+      type: string
+      description: Which platform's data to return. ALL is the combined figure.
+      enum:
+      - EZOIC
+      - ORIG
+      - ALL
+    DateGrouping:
+      type: string
+      description: Whether data is grouped by day, week, or month.
+      example: DAILY
     Order:
       type: object
       description: Sort by column index and direction.
@@ -166,6 +185,16 @@ components:
           enum:
           - ASC
           - DESC
+    Column:
+      type: object
+      description: A dimension or metric column.
+      properties:
+        Data:
+          type: string
+          example: report_day
+        Type:
+          type: string
+          example: string
     Filter:
       type: object
       description: A row filter applied to a column.
@@ -184,35 +213,6 @@ components:
         FilterValue:
           type: string
           example: '3'
-    DateGrouping:
-      type: string
-      description: Whether data is grouped by day, week, or month.
-      example: DAILY
-    Column:
-      type: object
-      description: A dimension or metric column.
-      properties:
-        Data:
-          type: string
-          example: report_day
-        Type:
-          type: string
-          example: string
-    Platform:
-      type: string
-      description: Which platform's data to return. ALL is the combined figure.
-      enum:
-      - EZOIC
-      - ORIG
-      - ALL
-  parameters:
-    developerKey:
-      name: developerKey
-      in: query
-      required: true
-      description: Your Ezoic API key, from Settings -> API Access in the Ezoic dashboard. Shared across every Ezoic API-gateway service you have enabled.
-      schema:
-        type: string
   securitySchemes:
     developerKey:
       type: apiKey

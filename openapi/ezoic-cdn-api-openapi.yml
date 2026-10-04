@@ -136,6 +136,10 @@ paths:
           $ref: '#/components/responses/CdnResult'
 components:
   schemas:
+    BareDomain:
+      type: string
+      description: The bare domain, without a subdomain (such as www.), a scheme (such as https://), or a path (such as /).
+      example: example.com
     CdnResult:
       type: object
       description: Every CDN endpoint returns the same response shape.
@@ -146,10 +150,6 @@ components:
         Error:
           type: string
           example: ''
-    BareDomain:
-      type: string
-      description: The bare domain, without a subdomain (such as www.), a scheme (such as https://), or a path (such as /).
-      example: example.com
   responses:
     CdnResult:
       description: Standard CDN service result envelope.
