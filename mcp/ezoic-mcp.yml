@@ -235,3 +235,16 @@ servers:
     round does not re-discover it and credit an A2A card that does not exist. api.bidsystem.ai returns
     a proper {"error":"not_found"} 404 for the same path.
 crosswalk: ezoic-tool-crosswalk.yml
+rfc9728:
+  endpoint: https://analytics-mcp.ezoic.com/mcp
+  metadata_url: https://analytics-mcp.ezoic.com/.well-known/oauth-protected-resource
+  discovered_via: WWW-Authenticate resource_metadata on an anonymous POST initialize
+  fetched: '2026-09-25'
+  http_status: 200
+  content_type: application/json
+  document:
+    resource: https://analytics-mcp.ezoic.com
+    authorization_servers:
+    - https://token.ezoic.com
+    bearer_methods_supported:
+    - header
