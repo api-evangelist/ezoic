@@ -3,6 +3,7 @@ method: searched
 checked:
 - https://registry.modelcontextprotocol.io/v0/servers
 - https://vendor-list.consensu.org/v3/vendor-list.json
+- wordpress/integrations/wordpress-integration-edges.yml
 marketplace_apps: []
 edges:
 - partner_name: MCP Registry
@@ -72,3 +73,22 @@ edges:
     detected: '2026-10-14'
   detected_by: sweep-adtech.py
   detected: '2026-10-14'
+- partner_name: WordPress (own)
+  partner: wordpress
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://wordpress.org/plugins/ezoic-integration/
+  mirror_of: wordpress/integrations/wordpress-integration-edges.yml
+  apps:
+  - Ezoic
+  listing_count: 1
+  detected: '2026-10-15'
+  detected_by: mirror-platform-listings.py
+  category: WordPress plugin
+source:
+- wordpress/integrations/wordpress-integration-edges.yml
