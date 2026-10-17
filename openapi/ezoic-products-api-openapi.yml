@@ -45,6 +45,19 @@ paths:
         '403':
           $ref: '#/components/responses/Forbidden'
 components:
+  responses:
+    Forbidden:
+      description: Subscriptions disabled for domain or invalid reader token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Missing required parameters or duplicate identity headers.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
     developerKey:
       name: developerKey
@@ -60,19 +73,6 @@ components:
       description: The domain being queried (must belong to your account).
       schema:
         type: string
-  responses:
-    Forbidden:
-      description: Subscriptions disabled for domain or invalid reader token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Missing required parameters or duplicate identity headers.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
     Error:
       type: object

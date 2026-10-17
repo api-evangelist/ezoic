@@ -136,6 +136,14 @@ paths:
           content:
             application/json: {}
 components:
+  parameters:
+    developerKey:
+      name: developerKey
+      in: query
+      required: true
+      description: Your Ezoic API key, from Settings -> API Access in the Ezoic dashboard. Shared across every Ezoic API-gateway service you have enabled.
+      schema:
+        type: string
   schemas:
     Order:
       type: object
@@ -159,14 +167,6 @@ components:
         Type:
           type: string
           example: string
-  parameters:
-    developerKey:
-      name: developerKey
-      in: query
-      required: true
-      description: Your Ezoic API key, from Settings -> API Access in the Ezoic dashboard. Shared across every Ezoic API-gateway service you have enabled.
-      schema:
-        type: string
   securitySchemes:
     developerKey:
       type: apiKey
