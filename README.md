@@ -64,6 +64,152 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-ezoic is a company surfaced as a portfolio company of balderton-capital and added to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+Ezoic is a website monetization and audience-growth platform for publishers, and a performance advertising marketplace for brands. Publishers integrate EzoicAds (via JavaScript, mobile SDKs for Android/iOS/Flutter/React Native/Unity, or framework SDKs for Angular/React/Vue) to run native, sticky, video, anchor, rewarded, and interstitial ad formats across 5,000+ premium sites. Beyond ads, Ezoic offers first-party Identity (ezID), Visitor Accounts (ezAuth), Ezoic Subscriptions (paywalls, donations, and a server-to-server REST API for verifying reader access), a Web Games ad SDK, and Custom Events into its Big Data Analytics platform. Its developer surface is a single API gateway (api-gateway.ezoic.com) fronting three services enabled individually from the dashboard and sharing one developerKey — Big Data Analytics for reports, segments and custom data; CDN for cache clearing and purging; and Subscriptions for server-side reader entitlement checks. Ezoic also runs three hosted MCP servers: a read-only Analytics server over OAuth, an anonymous Setup Assistant listed in the official MCP Registry as com.ezoic/setup, and an OAuth-gated endpoint on bidsystem.ai, its performance advertising platform for brands.
 
-Backed by: balderton-capital — https://www.ezoic.com/
+**Areas:** Company · Advertising · AdTech · Publisher Monetization · Analytics · Reporting · Subscription · Paywalls · Identity · CDN · Caching · MCP
+
+## ezoic on APIs.io
+
+Everything profiled for ezoic is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/ezoic/](https://apis.io/providers/ezoic/)** — or go straight to one of the APIs or properties below.
+
+### APIs (8)
+
+- [ezoic Access API](https://apis.io/apis/ezoic/ezoic-access-api/) — The Access API from ezoic — 1 operation(s) for access.
+- [ezoic Products API](https://apis.io/apis/ezoic/ezoic-products-api/) — The Products API from ezoic — 1 operation(s) for products.
+- [ezoic Purchases API](https://apis.io/apis/ezoic/ezoic-purchases-api/) — The Purchases API from ezoic — 1 operation(s) for purchases.
+- [ezoic CDN API](https://apis.io/apis/ezoic/ezoic-cdn-api/) — The CDN REST API clears and purges cached content on the Ezoic CDN — a single URL, a batch of URLs in groups of 100, a comma-separated set of surrogate…
+- [ezoic Data API](https://apis.io/apis/ezoic/ezoic-data-api/) — Pulling report data and ad-hoc custom data.
+- [ezoic Filters API](https://apis.io/apis/ezoic/ezoic-filters-api/) — Multifilters and multifilter types used to build segments.
+- [ezoic Reports API](https://apis.io/apis/ezoic/ezoic-reports-api/) — Predefined and custom report definitions.
+- [ezoic Segments API](https://apis.io/apis/ezoic/ezoic-segments-api/) — Segments that split report data into categories.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [ezoic-mcp.yml](https://apis.io/servers/ezoic/ezoic-mcp-yml/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Ezoic Agentic Access](https://apis.io/agentic-access/ezoic/ezoic-agentic-access/)
+
+#### Collections (3)
+
+Postman and Open Collection request collections.
+
+- [Ezoic Subscriptions Server-to-Server REST Access API](https://apis.io/collections/ezoic/open-ezoic-access-api/)
+- [Ezoic Subscriptions Server-to-Server REST Access Products API](https://apis.io/collections/ezoic/open-ezoic-products-api/)
+- [Ezoic Subscriptions Server-to-Server REST Access Purchases API](https://apis.io/collections/ezoic/open-ezoic-purchases-api/)
+
+#### Overlays (3)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Ezoic Big Data Analytics Overlay](https://apis.io/overlays/ezoic/ezoic-big-data-analytics-overlay/)
+- [Ezoic Cdn Overlay](https://apis.io/overlays/ezoic/ezoic-cdn-overlay/)
+- [Ezoic Subscriptions Overlay](https://apis.io/overlays/ezoic/ezoic-subscriptions-overlay/)
+
+#### Security (3)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Ezoic Authentication](https://apis.io/security/ezoic/ezoic-authentication/)
+- [Ezoic Domain Security](https://apis.io/security/ezoic/ezoic-domain-security/)
+- [Ezoic Vulnerability Disclosure](https://apis.io/security/ezoic/ezoic-vulnerability-disclosure/)
+
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [Ezoic Scopes](https://apis.io/scopes/ezoic/ezoic-scopes/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Ezoic Plans Pricing](https://apis.io/plans/ezoic/ezoic-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Ezoic Rate Limits](https://apis.io/rate-limits/ezoic/ezoic-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.ezoic.com/)
+- [Documentation](https://docs.ezoic.com/)
+- [Getting started](https://docs.ezoic.com/docs/ezoicads/getting-started/)
+- [API reference](https://docs.ezoic.com/docs/subscriptions/rest-api/)
+- [Pricing](https://www.ezoic.com/pricing)
+- [Sign up](https://admin.bidsystem.ai/register)
+- [Support](https://support.ezoic.com/)
+- [Blog](https://www.ezoic.com/blog)
+- [Security](https://www.ezoic.com/security)
+- [Terms of service](https://www.ezoic.com/terms)
+- [Privacy policy](https://www.ezoic.com/privacy-policy)
+- [GitHub](https://github.com/ezoic)
+- [Status](https://ezoicstatus.com/)
+
+## API Evangelist rating
+
+**Kin Score 53.1** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 75.0 |
+| Contract quality | 27.2 |
+| Contract governance | 18.2 |
+| Operational transparency | 36.8 |
+| Developer ergonomics | 74.4 |
+| Access clarity | 69.7 |
+
+**Agent readiness 50.5** — agent-ready (gated down from agent-native)
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | verified |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+| Pagination Ratio | — |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 40.2** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/ezoic/](https://apis.io/providers/ezoic/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for ezoic: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/ezoic/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
